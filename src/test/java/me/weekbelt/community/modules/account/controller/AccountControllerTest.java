@@ -1,6 +1,7 @@
 package me.weekbelt.community.modules.account.controller;
 
 import me.weekbelt.community.infra.MockMvcTest;
+import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,11 @@ class AccountControllerTest {
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
+
+        Account account = accountRepository.findByEmail("vfrvfr4207@hanmail.net").orElse(null);
+        assertThat(account).isNotNull();
+        assertThat(account.getPassword()).isNotEqualTo("12345678");
+        assertThat(account.getEmailCheckToken()).isNotNull();
 
         assertThat(accountRepository.existsByEmail("vfrvfr4207@hanmail.net")).isTrue();
     }
