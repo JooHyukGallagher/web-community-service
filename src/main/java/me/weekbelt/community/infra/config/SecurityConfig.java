@@ -13,12 +13,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        // 인가 API
+        http
+                .authorizeRequests()
                 .mvcMatchers("/", "/login", "/sign-up",
                         "/check-email-token", "login-by-email", "/email-login", "/check-email-login",
                         "/login-link", "/search/board/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .anyRequest().authenticated();
+
+        http
+                .formLogin()
+                .loginPage("/login")
+                .permitAll();
+
+        http
+                .logout()
+                .logoutSuccessUrl("/");
     }
 
     @Override
