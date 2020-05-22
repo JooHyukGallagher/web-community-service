@@ -60,11 +60,9 @@ public class AccountController {
             return view;
         }
 
-        findAccount.emailVerified();
-        findAccount.setJoinedAt(LocalDateTime.now());
+        findAccount.completeSignUp();
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", findAccount.getNickname());
-
         return view;
     }
 }

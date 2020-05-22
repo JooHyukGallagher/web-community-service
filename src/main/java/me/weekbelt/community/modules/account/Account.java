@@ -55,11 +55,10 @@ public class Account {
         this.joinedAt = joinedAt;
     }
 
-    public void emailVerified() {
+    public void completeSignUp() {
         this.emailVerified = true;
+        this.joinedAt = LocalDateTime.now();
     }
 
-    public void setJoinedAt(LocalDateTime joinedAt) {
-        this.joinedAt = joinedAt;
-    }
+    ;
 }
