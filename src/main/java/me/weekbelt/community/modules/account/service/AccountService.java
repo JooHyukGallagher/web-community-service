@@ -6,11 +6,16 @@ import me.weekbelt.community.infra.mail.EmailService;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.form.SignUpForm;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Transactional
 @RequiredArgsConstructor
@@ -53,5 +58,15 @@ public class AccountService {
     public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email)
                 .orElse(null);
+    }
+
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                account.getNickname(),
+                account.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(token);
     }
 }
