@@ -5,6 +5,7 @@ import me.weekbelt.community.infra.mail.EmailMessage;
 import me.weekbelt.community.infra.mail.EmailService;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.UserAccount;
+import me.weekbelt.community.modules.account.form.Profile;
 import me.weekbelt.community.modules.account.form.SignUpForm;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -83,5 +84,12 @@ public class AccountService implements UserDetailsService {
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
+    }
+
+    public void updateProfile(Account account, Profile profile) {
+        account.updateProfile(profile);
+        accountRepository.save(account);
+        // TODO: 프로필 이미지 수정
+        // TODO: 문제가 하나 더 남아 있습니다.
     }
 }

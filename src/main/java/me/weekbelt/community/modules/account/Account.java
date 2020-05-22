@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.weekbelt.community.modules.account.form.Profile;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
@@ -66,5 +67,11 @@ public class Account {
 
     public boolean canSendConfirmEmail() {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(10));
+    }
+
+    public void updateProfile(Profile profile) {
+        this.occupation = profile.getOccupation();
+        this.bio = profile.getBio();
+        this.location = profile.getLocation();
     }
 }
