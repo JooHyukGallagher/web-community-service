@@ -59,11 +59,6 @@ public class AccountService implements UserDetailsService {
         emailService.sendEmail(emailMessage);
     }
 
-    public Account getAccountByEmail(String email) {
-        return accountRepository.findByEmail(email)
-                .orElse(null);
-    }
-
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account),
