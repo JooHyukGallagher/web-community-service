@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class Account {
     private boolean emailVerified;
 
     private String emailCheckToken;
+    private LocalDateTime emailCheckTokenGeneratedAt;
 
     private LocalDateTime joinedAt;
 
@@ -41,8 +43,10 @@ public class Account {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
+
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
     @Builder
@@ -60,5 +64,7 @@ public class Account {
         this.joinedAt = LocalDateTime.now();
     }
 
-    ;
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(10));
+    }
 }

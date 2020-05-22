@@ -45,7 +45,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         // TODO: 회원가입 인증 이메일 보내기
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
