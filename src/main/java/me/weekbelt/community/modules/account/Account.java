@@ -54,4 +54,12 @@ public class Account {
         this.emailVerified = emailVerified;
         this.joinedAt = joinedAt;
     }
+
+    public void emailVerified() {
+        this.emailVerified = true;
+    }
+
+    public void setJoinedAt(LocalDateTime joinedAt) {
+        this.joinedAt = joinedAt;
+    }
 }

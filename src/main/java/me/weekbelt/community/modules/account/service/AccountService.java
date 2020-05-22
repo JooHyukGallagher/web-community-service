@@ -49,4 +49,9 @@ public class AccountService {
                 .build();
         emailService.sendEmail(emailMessage);
     }
+
+    public Account getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email)
+                .orElse(null);
+    }
 }
