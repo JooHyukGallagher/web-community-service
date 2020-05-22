@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.infra.mail.EmailMessage;
 import me.weekbelt.community.infra.mail.EmailService;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.account.UserAccount;
 import me.weekbelt.community.modules.account.form.SignUpForm;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -62,7 +63,7 @@ public class AccountService {
 
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                account.getNickname(),
+                new UserAccount(account),
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
