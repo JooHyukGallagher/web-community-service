@@ -62,8 +62,7 @@ public class AccountController {
             return view;
         }
 
-        findAccount.completeSignUp();
-        accountService.login(findAccount);
+        accountService.completeSignUp(findAccount);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", findAccount.getNickname());
         return view;

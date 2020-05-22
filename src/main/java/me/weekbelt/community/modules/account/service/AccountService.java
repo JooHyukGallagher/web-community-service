@@ -79,4 +79,9 @@ public class AccountService implements UserDetailsService {
         }
         return new UserAccount(account);
     }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
+    }
 }
