@@ -1,9 +1,6 @@
 package me.weekbelt.community.modules.account.form;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -12,7 +9,7 @@ import javax.validation.constraints.Pattern;
 
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-@Getter
+@Getter @Setter
 public class SignUpForm {
 
     @NotBlank

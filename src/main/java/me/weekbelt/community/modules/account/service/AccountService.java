@@ -44,7 +44,8 @@ public class AccountService {
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
                 .subject("회원 가입 인증")
-                .message("회원가입 인증을 해주세요.")
+                .message("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+                        "&email=" + newAccount.getEmail())
                 .build();
         emailService.sendEmail(emailMessage);
     }
