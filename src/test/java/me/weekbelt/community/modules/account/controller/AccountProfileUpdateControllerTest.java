@@ -118,4 +118,45 @@ class AccountProfileUpdateControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("passwordForm"));
     }
+
+    @DisplayName("닉네임 수정 폼")
+    @WithAccount("joohyuk")
+    @Test
+    public void updateNickname_form() throws Exception {
+        mockMvc.perform(get("/settings/account"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("nicknameForm"))
+                .andExpect(view().name("account/settings/account"));
+    }
+
+    @DisplayName("닉네임 수정 - 입력값 정상")
+    @WithAccount("joohyuk")
+    @Test
+    public void updateNickname_success() throws Exception {
+        mockMvc.perform(post("/settings/account")
+                .param("nickname", "twins")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/settings/account"))
+                .andExpect(flash().attributeExists("message"));
+
+        Account twins = accountRepository.findByNickname("twins").orElse(null);
+        assertThat(twins).isNotNull();
+        assertThat(twins.getNickname()).isEqualTo("twins");
+    }
+
+    @DisplayName("닉네임 수정 - 입력값 실패 - 중복값 입력")
+    @WithAccount("joohyuk")
+    @Test
+    public void updateNickname_fail() throws Exception {
+        mockMvc.perform(post("/settings/account")
+                .param("nickname", "joohyuk")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("account/settings/account"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("nicknameForm"))
+                .andExpect(model().hasErrors());
+    }
 }
