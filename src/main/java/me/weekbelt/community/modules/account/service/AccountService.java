@@ -89,7 +89,5 @@ public class AccountService implements UserDetailsService {
     public void updateProfile(Account account, Profile profile) {
         account.updateProfile(profile);
         accountRepository.save(account);
-        // TODO: 프로필 이미지 수정
-        // TODO: 문제가 하나 더 남아 있습니다.
     }
 }

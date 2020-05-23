@@ -73,5 +73,6 @@ public class Account {
         this.occupation = profile.getOccupation();
         this.bio = profile.getBio();
         this.location = profile.getLocation();
+        this.profileImage = profile.getProfileImage();
     }
 }
