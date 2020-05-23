@@ -83,4 +83,8 @@ public class Account {
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public boolean isValidToken(String token) {
+        return this.emailCheckToken.equals(token);
+    }
 }
