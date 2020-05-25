@@ -5,8 +5,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.board.form.BoardResponseForm;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter @NoArgsConstructor @EqualsAndHashCode(of = "id")
 @Entity
@@ -30,11 +32,18 @@ public class Board {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
+    private LocalDateTime createdDateTime;
+    private LocalDateTime modifiedDateTime;
+
     @Builder
-    public Board(String title, String content, Account account, BoardType boardType) {
+    public Board(String title, String content, Account account, BoardType boardType,
+                 LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.title = title;
         this.content = content;
         this.account = account;
         this.boardType = boardType;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateTime = modifiedDateTime;
     }
+
 }

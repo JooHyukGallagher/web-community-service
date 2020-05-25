@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<div th:fragment="board-type (type)" class="container mt-5">
+<div th:fragment="board-type (type)">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="notice" th:classappend="${type == 'notice'} ? active" th:href="@{/boards/notice}" aria-selected="true">공지</a>

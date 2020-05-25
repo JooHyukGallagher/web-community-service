@@ -8,7 +8,35 @@
     <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>
     하세요.
 </div>
-<div th:replace="fragments/boardFragments.html :: board-type(type = 'notice')"></div>
+<div class="container">
+    <div th:replace="fragments/boardFragments.html :: board-type(type = 'notice')"></div>
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">글 번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">글쓴이</th>
+                <th scope="col">작성 시간</th>
+                <th scope="col">조회수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boards}">
+                <td th:text="${board.id}" scope="row">1</td>
+                <td th:text="${board.title}">제목</td>
+                <td th:text="${board.nickname}">글쓴이</td>
+                <td class="fromNow" th:text="${board.createdDateTime}">작성 시간</td>
+                <td th:text="${board.viewCount}">조회수</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 <div th:replace="fragments/fragments.html::footer"></div>
+<script th:replace="fragments/fragments.html :: date-time"></script>
 </body>
 </html>
