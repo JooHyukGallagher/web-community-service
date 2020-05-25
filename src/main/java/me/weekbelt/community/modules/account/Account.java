@@ -66,7 +66,7 @@ public class Account {
     }
 
     public boolean canSendConfirmEmail() {
-        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(10));
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(1));
     }
 
     public void updateProfile(Profile profile) {

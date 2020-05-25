@@ -78,7 +78,7 @@ public class AccountController {
     @GetMapping("/resend-confirm-email")
     public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
         if (!account.canSendConfirmEmail()) {
-            model.addAttribute("error", "인증 이메일은 10분에 한번만 전송할 수 있습니다.");
+            model.addAttribute("error", "인증 이메일은 1분에 한번만 전송할 수 있습니다.");
             model.addAttribute("email", account.getEmail());
             return "account/check-email";
         }
@@ -114,7 +114,7 @@ public class AccountController {
         }
 
         if (!account.canSendConfirmEmail()) {
-            model.addAttribute("error", "이메일 로그인은 10분 뒤에 사용할 수 있습니다");
+            model.addAttribute("error", "이메일 로그인은 1분 뒤에 사용할 수 있습니다");
             return "account/email-login";
         }
 

@@ -1,8 +1,10 @@
 package me.weekbelt.community.modules.account.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.weekbelt.community.infra.mail.EmailMessage;
 import me.weekbelt.community.infra.mail.EmailService;
+import me.weekbelt.community.infra.mail.EmailUtilService;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.UserAccount;
 import me.weekbelt.community.modules.account.form.Profile;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -30,6 +33,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final EmailUtilService emailUtilService;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -50,15 +54,16 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendSignUpConfirmEmail(Account newAccount) {
-        // TODO: 회원가입 인증 이메일 보내기
+        String message = emailUtilService.createSignUpConfirmEmailHtmlMessage(newAccount);
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
-                .subject("회원 가입 인증")
-                .message("/check-email-token?token=" + newAccount.getEmailCheckToken() +
-                        "&email=" + newAccount.getEmail())
+                .subject("Community 게시판 서비스, 회원 가입 인증")
+                .message(message)
                 .build();
+
         emailService.sendEmail(emailMessage);
     }
+
 
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
@@ -70,11 +75,22 @@ public class AccountService implements UserDetailsService {
         context.setAuthentication(token);
     }
 
+    public void sendLoginLink(Account account) {
+        String message = emailUtilService.createLoginLinkHtmlMessage(account);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("Community 게시판 서비스, 로그인 링크")
+                .message(message)
+                .build();
+
+        emailService.sendEmail(emailMessage);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname).orElse(null);
-        if (account == null){
+        if (account == null) {
             account = accountRepository.findByNickname(emailOrNickname)
                     .orElseThrow(() -> new UsernameNotFoundException(emailOrNickname + "에 해당하는 유저가 없습니다."));
         }
@@ -102,13 +118,4 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
-    public void sendLoginLink(Account account) {
-        EmailMessage emailMessage = EmailMessage.builder()
-                .to(account.getEmail())
-                .subject("Community 게시판, 로그인 링크")
-                .message("/login-by-email?token=" + account.getEmailCheckToken() +
-                        "&email=" + account.getEmail())
-                .build();
-        emailService.sendEmail(emailMessage);
-    }
 }
