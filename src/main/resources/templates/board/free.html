@@ -8,14 +8,7 @@
     <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>
     하세요.
 </div>
-<section class="jumbotron text-center" th:if="${account == null}">
-    <div class="container">
-        <h1>Community 게시판</h1>
-        <p>
-            <a th:href="@{/sign-up}" class="btn btn-primary my-2">회원 가입</a>
-        </p>
-    </div>
-</section>
+<div th:replace="fragments/boardFragments.html :: board-type(type = 'free')"></div>
 <div th:replace="fragments/fragments.html::footer"></div>
 </body>
 </html>

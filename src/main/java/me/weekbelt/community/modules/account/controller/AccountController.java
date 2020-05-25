@@ -119,7 +119,7 @@ public class AccountController {
         }
 
         accountService.sendLoginLink(account);
-        attributes.addFlashAttribute("message", "이메일은 인증 메일을 발송했습니다.");
+        attributes.addFlashAttribute("message", "인증 메일을 발송했습니다.");
         return "redirect:/email-login";
     }
 

@@ -31,11 +31,10 @@ public class Board {
     private BoardType boardType;
 
     @Builder
-    public Board(String title, String content, Account account, Integer viewCount, BoardType boardType) {
+    public Board(String title, String content, Account account, BoardType boardType) {
         this.title = title;
         this.content = content;
         this.account = account;
-        this.viewCount = viewCount;
         this.boardType = boardType;
     }
 }

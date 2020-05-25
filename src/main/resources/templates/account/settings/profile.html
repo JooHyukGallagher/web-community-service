@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html::head"></head>
+<head th:replace="fragments/fragments.html::head"></head>
 <body class="bg-light">
-<div th:replace="fragments.html::main-nav"></div>
+<div th:replace="fragments/fragments.html::main-nav"></div>
 
 <div class="container">
     <div class="row mt-5 justify-content-center">
         <div class="col-2">
-            <div th:replace="account/accountFragments.html :: settings-menu(currentMenu='profile')"></div>
+            <div th:replace="fragments/accountFragments.html :: settings-menu(currentMenu='profile')"></div>
         </div>
         <div class="col-8">
             <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
@@ -89,7 +89,7 @@
         </div>
     </div>
 </div>
-<div th:replace="fragments.html::footer"></div>
+<div th:replace="fragments/fragments.html::footer"></div>
 <link href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
 <script src="/node_modules/cropper/dist/cropper.min.js"></script>
 <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
