@@ -7,7 +7,9 @@
 <div class="container">
     <div th:replace="fragments/boardFragments.html :: board-type(type = 'all')"></div>
     <div th:replace="fragments/boardFragments.html :: board-list(boards=${boards.content})"></div>
+    <a href="/new-board" class="btn btn-dark mt-5">글작성</a>
 </div>
 <div th:replace="fragments/fragments.html::footer"></div>
+<script th:replace="fragments/fragments.html :: date-time"></script>
 </body>
 </html>

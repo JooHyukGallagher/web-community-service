@@ -24,8 +24,6 @@ public class BoardController {
     public String boards(@CurrentAccount Account account, @PageableDefault Pageable pageable,
                          @PathVariable String boardType, Model model) {
         model.addAttribute("account", account);
-//        Page<BoardListElementForm> boardList = boardService.findBoardList(boardType, pageable);
-//        model.addAttribute("boards", boardList.getContent());
         model.addAttribute("boards", boardService.findBoardList(boardType, pageable));
         return "board/" + boardType;
     }

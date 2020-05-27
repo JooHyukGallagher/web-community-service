@@ -1,12 +1,13 @@
 package me.weekbelt.community.modules.board.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter @NoArgsConstructor
+@Getter @NoArgsConstructor @AllArgsConstructor
 @Builder
 public class BoardListElementForm {
 
@@ -16,7 +17,7 @@ public class BoardListElementForm {
 
     private String nickname;
 
-    private LocalDateTime createDateTime;
+    private LocalDateTime createdDateTime;
 
     private Integer viewCount;
 

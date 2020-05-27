@@ -52,7 +52,7 @@ public class BoardService {
                         .id(board.getId())
                         .title(board.getTitle())
                         .nickname(board.getAccount().getNickname())
-                        .createDateTime(board.getCreatedDateTime())
+                        .createdDateTime(board.getCreatedDateTime())
                         .viewCount(board.getViewCount())
                         .build()
         );
