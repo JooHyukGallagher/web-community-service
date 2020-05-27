@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments/fragments.html :: main-nav"></div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="border border-secondary my-4 p-4" style="width: 100%;">
+            <div class="row">
+                <div class="col-sm-10">
+                    <h3 class="my-4" th:text="${boardReadForm.title}">제목</h3>
+                </div>
+                <div class="col-sm text-right">
+                    <span th:text="'조회수' + ${boardReadForm.viewCount}">조회수1</span>
+                    <br>
+                    <span th:text="${boardReadForm.nickname}">작성자</span>
+                </div>
+            </div>
+            <div class="form-group my-4">
+                <textarea class="form-control" th:text="${boardReadForm.content}" rows="10" readonly>내용</textarea>
+            </div>
+
+            <div class="pull-left">
+                <a href="/boards?boardType=all" class="btn btn-outline-dark">목록으로</a>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-secondary" th:href="@{/boards/{id}/update(id=${boardReadForm.id})}">수정</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div th:replace="fragments/fragments.html :: footer"></div>
+<div th:replace="fragments/fragments.html :: editor-script"></div>
+</body>
+</html>

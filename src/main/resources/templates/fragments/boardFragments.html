@@ -7,23 +7,23 @@
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="all" th:classappend="${type == 'all'} ? active"
-               th:href="@{/boards/all}" aria-selected="true">전체</a>
+               href="/boards?boardType=all" aria-selected="true">전체</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="notice" th:classappend="${type == 'notice'} ? active"
-               th:href="@{/boards/notice}" aria-selected="false">공지</a>
+               href="/boards?boardType=notice" aria-selected="false">공지</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="free" th:classappend="${type == 'free'} ? active"
-               th:href="@{/boards/free}" aria-selected="false">자유</a>
+               href="/boards?boardType=free" aria-selected="false">자유</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="question" th:classappend="${type == 'question'} ? active"
-               th:href="@{/boards/question}" aria-selected="false">질문</a>
+               href="/boards?boardType=question" aria-selected="false">질문</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="promotion" th:classappend="${type == 'promotion'} ? active"
-               th:href="@{/boards/promotion}" aria-selected="false">홍보</a>
+               href="/boards?boardType=promotion" aria-selected="false">홍보</a>
         </li>
     </ul>
 </div>
@@ -115,25 +115,25 @@
                  endNumber=(${boardPages.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${boardPages.totalPages}">
 
         <li class="page-item">
-            <a class="page-link" aria-label="Previous" th:href="@{'/boards/' + ${boardType} + '?page=1'}">&laquo;</a>
+            <a class="page-link" aria-label="Previous" th:href="@{'/boards?boardType=' + ${boardType} + '&page=1'}">&laquo;</a>
         </li>
 
         <li class="page-item" th:classappend="${boardPages.first} ? disabled">
-            <a class="page-link" th:href="@{'/boards/' + ${boardType} + '?page=' + ${boardPages.number}}">&lsaquo;</a>
+            <a class="page-link" th:href="@{'/boards?boardType=' + ${boardType} + '&page=' + ${boardPages.number}}">&lsaquo;</a>
         </li>
 
         <li class="page-item" th:each="page :${#numbers.sequence(startNumber, endNumber)}"
             th:classappend="(${page} == ${boardPages.number} + 1) ? active">
-            <a class="page-link" th:href="@{'/boards/' + ${boardType} + '?page=' + ${page}}" th:text="${page}">
+            <a class="page-link" th:href="@{'/boards?boardType=' + ${boardType} + '&page=' + ${page}}" th:text="${page}">
                 <span class="sr-only"></span>
             </a>
         </li>
 
         <li class="page-item" th:classappend="${boardPages.last} ? disabled">
-            <a class="page-link" th:href="@{'/boards/' + ${boardType} + '?page=' + ${boardPages.number+2}}">&rsaquo;</a>
+            <a class="page-link" th:href="@{'/boards?boardType=' + ${boardType} + '&page=' + ${boardPages.number+2}}">&rsaquo;</a>
         </li>
         <li class="page-item">
-            <a class="page-link" aria-label="Next" th:href="@{'/boards/' + ${boardType} + '?page=' + ${boardPages.totalPages}}">&raquo;</a>
+            <a class="page-link" aria-label="Next" th:href="@{'/boards?boardType=' + ${boardType} + '&page=' + ${boardPages.totalPages}}">&raquo;</a>
         </li>
     </ul>
 </nav>
