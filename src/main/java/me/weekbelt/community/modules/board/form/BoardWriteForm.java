@@ -1,18 +1,15 @@
 package me.weekbelt.community.modules.board.form;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import me.weekbelt.community.modules.board.BoardType;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-public class BoardRequestForm {
+public class BoardWriteForm {
 
     @NotBlank
     @Length(min = 2, max = 30)

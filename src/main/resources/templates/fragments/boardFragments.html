@@ -6,17 +6,106 @@
 <div th:fragment="board-type (type)">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="notice" th:classappend="${type == 'notice'} ? active" th:href="@{/boards/notice}" aria-selected="true">공지</a>
+            <a class="nav-link" id="all" th:classappend="${type == 'all'} ? active"
+               th:href="@{/boards/all}" aria-selected="true">전체</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="free" th:classappend="${type == 'free'} ? active" th:href="@{/boards/free}" aria-selected="false">자유</a>
+            <a class="nav-link" id="notice" th:classappend="${type == 'notice'} ? active"
+               th:href="@{/boards/notice}" aria-selected="false">공지</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="question" th:classappend="${type == 'question'} ? active" th:href="@{/boards/question}" aria-selected="false">질문</a>
+            <a class="nav-link" id="free" th:classappend="${type == 'free'} ? active"
+               th:href="@{/boards/free}" aria-selected="false">자유</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="promotion" th:classappend="${type == 'promotion'} ? active" th:href="@{/boards/promotion}" aria-selected="false">홍보</a>
+            <a class="nav-link" id="question" th:classappend="${type == 'question'} ? active"
+               th:href="@{/boards/question}" aria-selected="false">질문</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="promotion" th:classappend="${type == 'promotion'} ? active"
+               th:href="@{/boards/promotion}" aria-selected="false">홍보</a>
         </li>
     </ul>
+</div>
+
+<div th:fragment="board-list (boards)">
+    <table class="table table-striped mt-5">
+        <thead>
+        <tr>
+            <th scope="col">글 번호</th>
+            <th scope="col">제목</th>
+            <th scope="col">글쓴이</th>
+            <th scope="col">작성 시간</th>
+            <th scope="col">조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${boards}">
+            <td th:text="${board.id}" scope="row">1</td>
+            <td th:text="${board.title}">제목</td>
+            <td th:text="${board.nickname}">글쓴이</td>
+            <td class="fromNow" th:text="${board.createdDateTime}">작성 시간</td>
+            <td th:text="${board.viewCount}">조회수</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:fragment="board-form (mode, action)">
+    <div class="py-5 text-center">
+        <h2>
+            <span th:if="${mode == 'edit'}">게시글 수정</span>
+            <span th:if="${mode == 'new'}">게시글 등록</span>
+        </h2>
+    </div>
+    <div class="row justify-content-center">
+        <form class="needs-validation col-sm-10" th:action="@{${action}}" method="post" th:object="${board}" novalidate>
+            <div class="form-group">
+                <label for="boardType">분류</label>
+                <select th:field="*{boardType}" class="custom-select mr-sm-2" id="boardType"
+                        aria-describedby="boardTypeHelp">
+                    <option th:value="NOTICE">공지</option>
+                    <option th:value="FREE">자유</option>
+                    <option th:value="QUESTION">질문</option>
+                    <option th:value="PROMOTION">홍보</option>
+                </select>
+                <small id="boardTypeHelp" class="form-text text-muted">
+                    분류를 선택해 주세요.
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input id="title" type="text" th:field="*{title}" class="form-control"
+                       placeholder="제목을 입력해 주세요" aria-describedby="titleHelp" required max="50">
+                <small id="titleHelp" class="form-text text-muted">
+                    제목을 2~30자 이내로 입력하세요.
+                </small>
+                <small class="invalid-feedback">제목을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title
+                    Error</small>
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" type="textarea" th:field="*{content}" class="form-control"
+                          placeholder="내용을 입력해 주세요." aria-describedby="contentHelp" required></textarea>
+                <small id="contentHelp" class="form-text text-muted">
+                    내용을 10자 이상 입력해주세요.
+                </small>
+                <small class="invalid-feedback">내용을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">FullDescription
+                    Error</small>
+            </div>
+
+            <div class="pull-left">
+                <a href="/boards/notice" class="btn btn-outline-dark">목록으로</a>
+            </div>
+            <div class="pull-right">
+                <button th:if="${mode == 'new'}" type="submit" class="btn btn-dark">저장</button>
+                <button th:if="${mode == 'edit'}" type="submit" class="btn btn-secondary">수정</button>
+                <a th:if="${mode == 'edit'}" type="button" class="btn btn-danger"
+                   href="/boards/delete">삭제</a>
+            </div>
+        </form>
+    </div>
 </div>
 </html>

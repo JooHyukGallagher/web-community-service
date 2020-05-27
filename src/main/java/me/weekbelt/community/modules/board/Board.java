@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
-import me.weekbelt.community.modules.board.form.BoardResponseForm;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

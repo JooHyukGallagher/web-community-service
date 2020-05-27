@@ -1,17 +1,14 @@
 package me.weekbelt.community.modules.board.form;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import me.weekbelt.community.modules.board.BoardType;
 
 import java.time.LocalDateTime;
 
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Getter
-public class BoardResponseForm {
+public class BoardReadForm {
 
     private Long id;
 
@@ -24,4 +21,6 @@ public class BoardResponseForm {
     private Integer viewCount;
 
     private BoardType boardType;
+
+    private String nickname;
 }
