@@ -108,4 +108,33 @@
         </form>
     </div>
 </div>
+
+<nav aria-label="Page navigation" class="mt-5" th:fragment="board-pagination (boardType, boardPages)">
+    <ul class="pagination justify-content-center"
+        th:with="startNumber=${T(Math).floor(boardPages.number/10)}*10+1,
+                 endNumber=(${boardPages.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${boardPages.totalPages}">
+
+        <li class="page-item">
+            <a class="page-link" aria-label="Previous" th:href="@{'/boards/' + ${boardType} + '?page=1'}">&laquo;</a>
+        </li>
+
+        <li class="page-item" th:classappend="${boardPages.first} ? disabled">
+            <a class="page-link" th:href="@{'/boards/' + ${boardType} + '?page=' + ${boardPages.number}}">&lsaquo;</a>
+        </li>
+
+        <li class="page-item" th:each="page :${#numbers.sequence(startNumber, endNumber)}"
+            th:classappend="(${page} == ${boardPages.number} + 1) ? active">
+            <a class="page-link" th:href="@{'/boards/' + ${boardType} + '?page=' + ${page}}" th:text="${page}">
+                <span class="sr-only"></span>
+            </a>
+        </li>
+
+        <li class="page-item" th:classappend="${boardPages.last} ? disabled">
+            <a class="page-link" th:href="@{'/boards/' + ${boardType} + '?page=' + ${boardPages.number+2}}">&rsaquo;</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" aria-label="Next" th:href="@{'/boards/' + ${boardType} + '?page=' + ${boardPages.totalPages}}">&raquo;</a>
+        </li>
+    </ul>
+</nav>
 </html>

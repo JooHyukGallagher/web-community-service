@@ -25,6 +25,7 @@ public class BoardController {
                          @PathVariable String boardType, Model model) {
         model.addAttribute("account", account);
         model.addAttribute("boards", boardService.findBoardList(boardType, pageable));
+        model.addAttribute("boardType", boardType);
         return "board/" + boardType;
     }
 
