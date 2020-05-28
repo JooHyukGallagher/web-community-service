@@ -5,10 +5,10 @@
 <div th:replace="fragments/fragments.html :: main-nav"></div>
 <div class="container">
     <div class="py-5 text-center">
-        <h2>게시글 등록</h2>
+        <h2>게시글 수정</h2>
     </div>
     <div class="row justify-content-center">
-        <form class="needs-validation col-sm-10" th:action="@{/newe-board}" method="post" th:object="${boardWriteForm}" novalidate>
+        <form class="needs-validation col-sm-10" th:action="@{/boards/{id}/update(id=${id})}" method="post" th:object="${boardWriteForm}" novalidate>
             <div class="form-group">
                 <label for="boardType">분류</label>
                 <select th:field="*{boardType}" class="custom-select mr-sm-2" id="boardType"
@@ -49,7 +49,7 @@
                 <a href="/boards/notice" class="btn btn-outline-dark">목록으로</a>
             </div>
             <div class="pull-right">
-                <button type="submit" class="btn btn-dark">저장</button>
+                <button type="submit" class="btn btn-dark">수정</button>
             </div>
         </form>
     </div>
