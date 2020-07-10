@@ -19,5 +19,6 @@ public class BoardWriteForm {
     @Length(min = 10)
     private String content;
 
-    private BoardType boardType = BoardType.FREE;
+    private BoardType boardType;
+
 }

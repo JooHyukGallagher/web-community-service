@@ -56,12 +56,12 @@ public class BoardController {
         return "board/updateForm";
     }
 
-    @PostMapping("/boards/{id}/update")
-    public String updateBoardSubmit(@CurrentAccount Account account, @PathVariable Long id,
-                                    @Valid BoardWriteForm boardWriteForm,
-                                    Model model){
-
-    }
+//    @PostMapping("/boards/{id}/update")
+//    public String updateBoardSubmit(@CurrentAccount Account account, @PathVariable Long id,
+//                                    @Valid BoardWriteForm boardWriteForm,
+//                                    Model model){
+//
+//    }
 
     @GetMapping("/new-board")
     public String createNewBoard(@CurrentAccount Account account, Model model) {
