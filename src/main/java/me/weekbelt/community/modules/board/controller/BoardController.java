@@ -65,6 +65,9 @@ public class BoardController {
 
     @GetMapping("/new-board")
     public String createNewBoard(@CurrentAccount Account account, Model model) {
+        if(!account.isEmailVerified()) {
+            return "redirect:/check-email";
+        }
         model.addAttribute("account", account);
         model.addAttribute("board", new BoardWriteForm());
         return "board/creationForm";
