@@ -3,11 +3,7 @@
 <head th:replace="fragments/fragments.html :: head"></head>
 <body class="bg-light">
 <div th:replace="fragments/fragments.html :: main-nav"></div>
-<div class="alert alert-waring" role="alert" th:if="${account != null && !account.emailVerified}">
-    스터디올레 가입을 완료하려면
-    <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>
-    하세요.
-</div>
+<div th:replace="fragments/fragments.html :: email-verified-alert"></div>
 <section class="jumbotron text-center" th:if="${account == null}">
     <div class="container">
         <h1>Community 게시판</h1>
