@@ -6,11 +6,13 @@ import me.weekbelt.community.infra.mail.EmailMessage;
 import me.weekbelt.community.infra.mail.EmailService;
 import me.weekbelt.community.infra.mail.EmailUtilService;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.account.Role;
 import me.weekbelt.community.modules.account.UserAccount;
 import me.weekbelt.community.modules.account.form.Profile;
 import me.weekbelt.community.modules.account.form.SignUpForm;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Transactional
@@ -66,11 +69,13 @@ public class AccountService implements UserDetailsService {
 
 
     public void login(Account account) {
+        Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(account);
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(account),
+                new UserAccount(account, grantedAuthorities),
                 account.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+                grantedAuthorities);
+
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(token);
     }
@@ -94,7 +99,19 @@ public class AccountService implements UserDetailsService {
             account = accountRepository.findByNickname(emailOrNickname)
                     .orElseThrow(() -> new UsernameNotFoundException(emailOrNickname + "에 해당하는 유저가 없습니다."));
         }
-        return new UserAccount(account);
+
+        Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(account);
+        return new UserAccount(account, grantedAuthorities);
+    }
+
+    private Set<GrantedAuthority> getGrantedAuthorities(Account account) {
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        if (account.getId() == 1 || account.getNickname().equals("weekbelt")) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
+        } else {
+            grantedAuthorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
+        }
+        return grantedAuthorities;
     }
 
     public void completeSignUp(Account account) {
