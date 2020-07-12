@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,13 +44,7 @@ public class AccountService implements UserDetailsService {
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .emailVerified(false)
-                .joinedAt(LocalDateTime.now())
-                .build();
+        Account account = Account.createAccountFromSignUpForm(signUpForm, passwordEncoder);
         account.generateEmailCheckToken();
         return accountRepository.save(account);
     }

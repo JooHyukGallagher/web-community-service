@@ -5,7 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.form.Profile;
+import me.weekbelt.community.modules.account.form.SignUpForm;
 import org.apache.tomcat.jni.Local;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,6 +45,16 @@ public class Account {
     @Lob
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
+
+    public static Account createAccountFromSignUpForm(SignUpForm signUpForm, PasswordEncoder passwordEncoder){
+        return Account.builder()
+                .email(signUpForm.getEmail())
+                .nickname(signUpForm.getNickname())
+                .password(passwordEncoder.encode(signUpForm.getPassword()))
+                .emailVerified(false)
+                .joinedAt(LocalDateTime.now())
+                .build();
+    }
 
 
     public void generateEmailCheckToken() {
