@@ -55,7 +55,7 @@ class MainControllerTest {
                 .andExpect(authenticated().withUsername("joohyuk"));
     }
 
-    @DisplayName("이름으고 로그인 성공")
+    @DisplayName("이름으로 로그인 성공")
     @Test
     public void login_with_nickname() throws Exception {
         mockMvc.perform(post("/login")
