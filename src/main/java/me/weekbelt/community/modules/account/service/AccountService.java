@@ -99,7 +99,7 @@ public class AccountService implements UserDetailsService {
 
     private Set<GrantedAuthority> getGrantedAuthorities(Account account) {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        if (account.getId() == 1 || account.getNickname().equals("weekbelt")) {
+        if (account.getNickname().equals("weekbelt")) {
             grantedAuthorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
         } else {
             grantedAuthorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));

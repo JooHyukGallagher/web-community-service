@@ -7,7 +7,7 @@ import me.weekbelt.community.modules.board.form.BoardReadForm;
 import java.time.LocalDateTime;
 
 public class BoardDtoFactory {
-    public static Board boardRequestFormToBoard(Account account, BoardWriteForm boardWriteForm){
+    public static Board boardWriteFormToBoard(Account account, BoardWriteForm boardWriteForm){
         return Board.builder()
                 .title(boardWriteForm.getTitle())
                 .boardType(boardWriteForm.getBoardType())

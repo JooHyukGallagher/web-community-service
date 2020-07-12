@@ -12,17 +12,13 @@
               novalidate>
             <div class="form-group">
                 <label for="boardType">분류</label>
-                <select id="boardType" class="custom-select mr-sm-2">
-                    <option th:each="boardType : ${T(me.weekbelt.community.modules.board.BoardType).values()}"
-                            th:value="${boardType}" th:text="${boardType.value}"></option>
+                <select th:field="*{boardType}" class="custom-select mr-sm-2" id="boardType"
+                        aria-describedby="boardTypeHelp">
+                    <option th:value="NOTICE">공지</option>
+                    <option th:value="FREE">자유</option>
+                    <option th:value="QUESTION">질문</option>
+                    <option th:value="PROMOTION">홍보</option>
                 </select>
-                <!--                <select th:field="*{boardType}" class="custom-select mr-sm-2" id="boardType"-->
-                <!--                        aria-describedby="boardTypeHelp">-->
-                <!--                    <option th:value="NOTICE">공지</option>-->
-                <!--                    <option th:value="FREE">자유</option>-->
-                <!--                    <option th:value="QUESTION">질문</option>-->
-                <!--                    <option th:value="PROMOTION">홍보</option>-->
-                <!--                </select>-->
                 <small id="boardTypeHelp" class="form-text text-muted">
                     분류를 선택해 주세요.
                 </small>

@@ -72,12 +72,11 @@ public class BoardService {
                 .build();
     }
 
-    public BoardReadForm createBoard(Account account, BoardWriteForm boardWriteForm) {
+    public void createBoard(Account account, BoardWriteForm boardWriteForm) {
         Account findAccount = accountRepository.findById(account.getId()).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 계정입니다."));
 
-        Board board = BoardDtoFactory.boardRequestFormToBoard(findAccount, boardWriteForm);
-        Board savedBoard = boardRepository.save(board);
-        return BoardDtoFactory.boardToBoardResponseForm(savedBoard);
+        Board board = BoardDtoFactory.boardWriteFormToBoard(findAccount, boardWriteForm);
+        boardRepository.save(board);
     }
 }
