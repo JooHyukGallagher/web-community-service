@@ -3,10 +3,8 @@
 <head th:replace="fragments/fragments.html :: head"></head>
 <body class="bg-light">
 <div th:replace="fragments/fragments.html :: main-nav"></div>
+<div class="alert alert-warning" role="alert" th:if="${message != null}" th:text="${message}"></div>
 <div class="container">
-<!--    TODO: 모달 팝업 구현-->
-<!--    <div class="alert alert-warning" role="alert" th:if="${message != null}" th:text="${message}">-->
-<!--    </div>-->
     <div class="py-5 text-center">
         <h2>게시글 등록</h2>
     </div>
