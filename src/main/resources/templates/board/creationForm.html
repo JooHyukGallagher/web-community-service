@@ -4,11 +4,14 @@
 <body class="bg-light">
 <div th:replace="fragments/fragments.html :: main-nav"></div>
 <div class="container">
+<!--    TODO: 모달 팝업 구현-->
+<!--    <div class="alert alert-warning" role="alert" th:if="${message != null}" th:text="${message}">-->
+<!--    </div>-->
     <div class="py-5 text-center">
         <h2>게시글 등록</h2>
     </div>
     <div class="row justify-content-center">
-        <form class="needs-validation col-sm-10" th:action="@{/new-board}" method="post" th:object="${board}"
+        <form class="needs-validation col-sm-10" th:action="@{/new-board}" method="post" th:object="${boardWriteForm}"
               novalidate>
             <div class="form-group">
                 <label for="boardType">분류</label>
@@ -37,7 +40,8 @@
             <div class="form-group">
                 <label for="content">내용</label>
                 <textarea id="content" type="textarea" th:field="*{content}" class="form-control"
-                          placeholder="내용을 입력해 주세요." aria-describedby="contentHelp" required></textarea>
+                          placeholder="내용을 입력해 주세요." aria-describedby="contentHelp" minlength="10" required>
+                </textarea>
                 <small id="contentHelp" class="form-text text-muted">
                     내용을 10자 이상 입력해주세요.
                 </small>

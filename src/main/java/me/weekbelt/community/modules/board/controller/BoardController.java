@@ -76,7 +76,7 @@ public class BoardController {
             return "redirect:/check-email";
         }
         model.addAttribute("account", account);
-        model.addAttribute("board", new BoardWriteForm());
+        model.addAttribute("boardWriteForm", new BoardWriteForm());
         return "board/creationForm";
     }
 
@@ -86,7 +86,6 @@ public class BoardController {
                                        Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("account", account);
-            model.addAttribute("board", boardWriteForm);
             return "board/creationForm";
         }
 
@@ -98,7 +97,7 @@ public class BoardController {
                 return "redirect:/boards";
             } else {
                 model.addAttribute("account", account);
-                model.addAttribute("board", boardWriteForm);
+                model.addAttribute("boardWriteForm", boardWriteForm);
                 model.addAttribute("message", "공지글을 작성할 권한이 없습니다.");
                 return "board/creationForm";
             }

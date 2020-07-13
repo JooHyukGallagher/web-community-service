@@ -33,7 +33,7 @@ class BoardControllerTest {
         mockMvc.perform(get("/new-board"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("board"))
+                .andExpect(model().attributeExists("boardWriteForm"))
                 .andExpect(view().name("board/creationForm"));
     }
 
@@ -70,7 +70,7 @@ class BoardControllerTest {
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("board"))
+                .andExpect(model().attributeExists("boardWriteForm"))
                 .andExpect(model().attributeExists("message"))
                 .andExpect(view().name("board/creationForm"));
     }
@@ -99,7 +99,6 @@ class BoardControllerTest {
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("board"))
                 .andExpect(view().name("board/creationForm"));
     }
 }
