@@ -45,4 +45,8 @@ public class Board {
         this.modifiedDateTime = modifiedDateTime;
     }
 
+    public void plusViewCount() {
+        viewCount++;
+    }
+
 }

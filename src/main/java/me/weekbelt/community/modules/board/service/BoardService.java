@@ -61,6 +61,7 @@ public class BoardService {
     public BoardReadForm findBoardReadFormById(Long id){
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다. id=" + id));
+        board.plusViewCount();
         return BoardReadForm.builder()
                 .id(board.getId())
                 .boardType(board.getBoardType())
@@ -75,7 +76,6 @@ public class BoardService {
     public void createBoard(Account account, BoardWriteForm boardWriteForm) {
         Account findAccount = accountRepository.findById(account.getId()).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 계정입니다."));
-
         Board board = BoardDtoFactory.boardWriteFormToBoard(findAccount, boardWriteForm);
         boardRepository.save(board);
     }
