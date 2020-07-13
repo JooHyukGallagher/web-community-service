@@ -31,19 +31,19 @@ public class BoardService {
         Page<Board> boardList;
         switch (boardType) {
             case "notice":
-                boardList = boardRepository.findAllByBoardType(BoardType.NOTICE, pageable);
+                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.NOTICE, pageable);
                 break;
             case "free":
-                boardList = boardRepository.findAllByBoardType(BoardType.FREE, pageable);
+                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.FREE, pageable);
                 break;
             case "question":
-                boardList = boardRepository.findAllByBoardType(BoardType.QUESTION, pageable);
+                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.QUESTION, pageable);
                 break;
             case "promotion":
-                boardList = boardRepository.findAllByBoardType(BoardType.PROMOTION, pageable);
+                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.PROMOTION, pageable);
                 break;
             default:
-                boardList = boardRepository.findAll(pageable);
+                boardList = boardRepository.findAllByOrderByIdDesc(pageable);
                 break;
         }
 
