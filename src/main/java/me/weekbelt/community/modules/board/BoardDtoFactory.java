@@ -2,6 +2,7 @@ package me.weekbelt.community.modules.board;
 
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.board.form.BoardListElementForm;
+import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.form.BoardReadForm;
 
@@ -40,5 +41,13 @@ public class BoardDtoFactory {
                .nickname(board.getAccount().getNickname())
                .profileImage(board.getAccount().getProfileImage())
                .build();
+    }
+
+    public static BoardUpdateForm boardToBoardUpdateForm (Board board) {
+        return BoardUpdateForm.builder()
+                .title(board.getTitle())
+                .boardType(board.getBoardType())
+                .content(board.getContent())
+                .build();
     }
 }

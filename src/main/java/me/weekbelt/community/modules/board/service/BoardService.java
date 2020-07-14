@@ -7,6 +7,7 @@ import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
 import me.weekbelt.community.modules.board.form.BoardListElementForm;
+import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.form.BoardReadForm;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
@@ -58,7 +59,7 @@ public class BoardService {
 
     public BoardReadForm findBoardReadFormById(Long id){
         Board board = boardRepository.findBoardWithAccountById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다. id=" + id));
+                .orElseThrow(() -> new IllegalArgumentException("찾 게시글이 없습니. 게시글 아이디=" + id));
         board.plusViewCount();
         return BoardDtoFactory.boardToBoardReadForm(board);
     }
@@ -68,5 +69,10 @@ public class BoardService {
                 new IllegalArgumentException("존재하지 않는 계정입니다."));
         Board board = BoardDtoFactory.boardWriteFormToBoard(findAccount, boardWriteForm);
         boardRepository.save(board);
+    }
+
+    public void updateBoard(Long boardId, BoardUpdateForm boardUpdateForm) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다. 게시글 아이디=" + boardId));
+        board.update(boardUpdateForm);
     }
 }

@@ -3,9 +3,12 @@ package me.weekbelt.community.modules.board.controller;
 import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.CurrentAccount;
+import me.weekbelt.community.modules.board.Board;
+import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
-import me.weekbelt.community.modules.board.form.BoardReadForm;
+import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
+import me.weekbelt.community.modules.board.repository.BoardRepository;
 import me.weekbelt.community.modules.board.service.BoardService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,6 +33,7 @@ import java.util.Iterator;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
     @GetMapping("/boards")
     public String boards(@CurrentAccount Account account, @PageableDefault Pageable pageable,
@@ -51,24 +55,43 @@ public class BoardController {
     @GetMapping("/boards/{id}/update")
     public String updateBoardForm(@CurrentAccount Account account, @PathVariable Long id,
                                   Model model) {
-        BoardReadForm boardReadForm = boardService.findBoardReadFormById(id);
-        BoardWriteForm boardWriteForm = BoardWriteForm.builder()
-                .title(boardReadForm.getTitle())
-                .boardType(boardReadForm.getBoardType())
-                .content(boardReadForm.getContent())
-                .build();
+        Board board = boardRepository.findBoardWithAccountById(id)
+                .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다."));
+        BoardUpdateForm boardUpdateForm = BoardDtoFactory.boardToBoardUpdateForm(board);
+
         model.addAttribute("account", account);
-        model.addAttribute("boardWriteForm", boardWriteForm);
+        model.addAttribute("boardUpdateForm", boardUpdateForm);
         model.addAttribute("id", id);
+
         return "board/updateForm";
     }
 
-//    @PostMapping("/boards/{id}/update")
-//    public String updateBoardSubmit(@CurrentAccount Account account, @PathVariable Long id,
-//                                    @Valid BoardWriteForm boardWriteForm,
-//                                    Model model){
-//
-//    }
+    @PostMapping("/boards/{id}/update")
+    public String updateBoardSubmit(@CurrentAccount Account account, @PathVariable Long id,
+                                    @Valid BoardUpdateForm boardUpdateForm, Errors errors,
+                                    Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("account", account);
+            return "board/updateForm";
+        }
+
+        if (boardUpdateForm.getBoardType() == BoardType.NOTICE) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                boardService.updateBoard(id, boardUpdateForm);
+                return "redirect:/boards/" + id;
+            } else {
+                model.addAttribute("account", account);
+                model.addAttribute("boardUpdateForm", boardUpdateForm);
+                model.addAttribute("message", "게시글을 공지로 수정 권한이 없습니다.");
+                return "board/updateForm";
+            }
+        } else {
+            boardService.updateBoard(id, boardUpdateForm);
+            return "redirect:/boards/" + id;
+        }
+    }
 
     @GetMapping("/new-board")
     public String createNewBoard(@CurrentAccount Account account, Model model) {

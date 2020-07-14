@@ -3,12 +3,13 @@
 <head th:replace="fragments/fragments.html :: head"></head>
 <body class="bg-light">
 <div th:replace="fragments/fragments.html :: main-nav"></div>
+<div class="alert alert-warning" role="alert" th:if="${message != null}" th:text="${message}"></div>
 <div class="container">
     <div class="py-5 text-center">
         <h2>게시글 수정</h2>
     </div>
     <div class="row justify-content-center">
-        <form class="needs-validation col-sm-10" th:action="@{/boards/{id}/update(id=${id})}" method="post" th:object="${boardWriteForm}" novalidate>
+        <form class="needs-validation col-sm-10" th:action="@{/boards/{id}/update(id=${id})}" method="post" th:object="${boardUpdateForm}" novalidate>
             <div class="form-group">
                 <label for="boardType">분류</label>
                 <select th:field="*{boardType}" class="custom-select mr-sm-2" id="boardType"

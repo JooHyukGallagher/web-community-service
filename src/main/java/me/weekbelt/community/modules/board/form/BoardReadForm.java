@@ -1,6 +1,7 @@
 package me.weekbelt.community.modules.board.form;
 
 import lombok.*;
+import me.weekbelt.community.modules.account.UserAccount;
 import me.weekbelt.community.modules.board.BoardType;
 
 import java.time.LocalDateTime;
@@ -25,4 +26,9 @@ public class BoardReadForm {
     private String nickname;
 
     private String profileImage;
+
+    public boolean isWriter(UserAccount userAccount) {
+        return this.nickname.equals(userAccount.getUsername());
+    }
+
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -49,4 +50,9 @@ public class Board {
         viewCount++;
     }
 
+    public void update(BoardUpdateForm boardUpdateForm) {
+        this.title = boardUpdateForm.getTitle();
+        this.content = boardUpdateForm.getContent();
+        this.boardType = boardUpdateForm.getBoardType();
+    }
 }
