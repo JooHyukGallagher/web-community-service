@@ -59,7 +59,7 @@ public class BoardService {
     }
 
     public BoardReadForm findBoardReadFormById(Long id){
-        Board board = boardRepository.findById(id)
+        Board board = boardRepository.findBoardWithAccountById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다. id=" + id));
         board.plusViewCount();
         return BoardReadForm.builder()
@@ -70,6 +70,7 @@ public class BoardService {
                 .createdDateTime(board.getCreatedDateTime())
                 .viewCount(board.getViewCount())
                 .nickname(board.getAccount().getNickname())
+                .profileImage(board.getAccount().getProfileImage())
                 .build();
     }
 

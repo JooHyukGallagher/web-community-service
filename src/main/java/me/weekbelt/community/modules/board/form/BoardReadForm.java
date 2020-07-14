@@ -23,4 +23,6 @@ public class BoardReadForm {
     private BoardType boardType;
 
     private String nickname;
+
+    private String profileImage;
 }

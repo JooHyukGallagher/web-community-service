@@ -2,12 +2,16 @@ package me.weekbelt.community.modules.board.controller;
 
 import me.weekbelt.community.infra.MockMvcTest;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.account.AccountFactory;
 import me.weekbelt.community.modules.account.WithAccount;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
+import me.weekbelt.community.modules.board.Board;
+import me.weekbelt.community.modules.board.BoardFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,16 +25,25 @@ class BoardControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private AccountFactory accountFactory;
+    @Autowired
+    private BoardFactory boardFactory;
 
     @DisplayName("게시글 생성 폼 - 성공")
     @WithAccount("joohyuk")
     @Test
     public void createBoardForm_success() throws Exception {
+        // given
         Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
         assert joohyuk != null;
         joohyuk.completeSignUp();
 
-        mockMvc.perform(get("/new-board"))
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/new-board"));
+
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("boardWriteForm"))
@@ -41,7 +54,11 @@ class BoardControllerTest {
     @WithAccount("joohyuk")
     @Test
     public void createBoardForm_fail() throws Exception {
-        mockMvc.perform(get("/new-board"))
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/new-board"));
+
+        // then
+        resultActions
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/check-email"));
     }
@@ -50,11 +67,15 @@ class BoardControllerTest {
     @WithAccount("weekbelt")
     @Test
     public void createNoticeBoard_success() throws Exception {
-        mockMvc.perform(post("/new-board")
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/new-board")
                 .param("boardType", "NOTICE")
                 .param("title", "공지 게시글")
                 .param("content", "공지 게시글 입니다.")
-                .with(csrf()))
+                .with(csrf()));
+
+        // then
+        resultActions
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/boards"));
     }
@@ -63,11 +84,15 @@ class BoardControllerTest {
     @WithAccount("joohyuk")
     @Test
     public void createNoticeBoard_fail() throws Exception {
-        mockMvc.perform(post("/new-board")
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/new-board")
                 .param("boardType", "NOTICE")
                 .param("title", "공지 게시글")
                 .param("content", "공지 게시글 입니다.")
-                .with(csrf()))
+                .with(csrf()));
+
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("boardWriteForm"))
@@ -79,11 +104,15 @@ class BoardControllerTest {
     @WithAccount("joohyuk")
     @Test
     public void createBoard_success() throws Exception {
-        mockMvc.perform(post("/new-board")
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/new-board")
                 .param("boardType", "FREE")
                 .param("title", "자유 게시글")
                 .param("content", "자유 게시글 입니다.")
-                .with(csrf()))
+                .with(csrf()));
+
+        // then
+        resultActions
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/boards"));
     }
@@ -92,13 +121,36 @@ class BoardControllerTest {
     @WithAccount("joohyuk")
     @Test
     public void createBoard_fail() throws Exception {
-        mockMvc.perform(post("/new-board")
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/new-board")
                 .param("boardType", "FREE")
                 .param("title", "")
                 .param("content", "자유 게시글 입니다.")
-                .with(csrf()))
+                .with(csrf()));
+
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(view().name("board/creationForm"));
+    }
+
+    @DisplayName("게시글 조회")
+    @WithAccount("joohyuk")
+    @Test
+    public void readBoard() throws Exception {
+        // given
+        Account twins = accountFactory.createAccount("twins");
+        Board board = boardFactory.createBoard(twins);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId()));
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("boardReadForm"))
+                .andExpect(view().name("board/readForm"));
     }
 }
