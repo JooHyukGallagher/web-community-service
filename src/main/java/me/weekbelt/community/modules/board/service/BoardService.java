@@ -29,6 +29,13 @@ public class BoardService {
                 pageable.getPageSize());
 
         Page<Board> boardList;
+        boardList = getBoardPageByBoardType(boardType, pageable);
+
+        return boardList.map(BoardDtoFactory::boardToBoardListElementForm);
+    }
+
+    private Page<Board> getBoardPageByBoardType(String boardType, Pageable pageable) {
+        Page<Board> boardList;
         switch (boardType) {
             case "notice":
                 boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.NOTICE, pageable);
@@ -46,32 +53,14 @@ public class BoardService {
                 boardList = boardRepository.findAllByOrderByIdDesc(pageable);
                 break;
         }
-
-        return boardList.map(board ->
-                BoardListElementForm.builder()
-                        .id(board.getId())
-                        .title(board.getTitle())
-                        .nickname(board.getAccount().getNickname())
-                        .createdDateTime(board.getCreatedDateTime())
-                        .viewCount(board.getViewCount())
-                        .build()
-        );
+        return boardList;
     }
 
     public BoardReadForm findBoardReadFormById(Long id){
         Board board = boardRepository.findBoardWithAccountById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다. id=" + id));
         board.plusViewCount();
-        return BoardReadForm.builder()
-                .id(board.getId())
-                .boardType(board.getBoardType())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .createdDateTime(board.getCreatedDateTime())
-                .viewCount(board.getViewCount())
-                .nickname(board.getAccount().getNickname())
-                .profileImage(board.getAccount().getProfileImage())
-                .build();
+        return BoardDtoFactory.boardToBoardReadForm(board);
     }
 
     public void createBoard(Account account, BoardWriteForm boardWriteForm) {

@@ -6,6 +6,7 @@ import me.weekbelt.community.infra.mail.EmailMessage;
 import me.weekbelt.community.infra.mail.EmailService;
 import me.weekbelt.community.infra.mail.EmailUtilService;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.account.AccountDtoFactory;
 import me.weekbelt.community.modules.account.Role;
 import me.weekbelt.community.modules.account.UserAccount;
 import me.weekbelt.community.modules.account.form.Profile;
@@ -44,7 +45,7 @@ public class AccountService implements UserDetailsService {
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
-        Account account = Account.createAccountFromSignUpForm(signUpForm, passwordEncoder);
+        Account account = AccountDtoFactory.signUpFormToAccount(signUpForm, passwordEncoder);
         account.generateEmailCheckToken();
         return accountRepository.save(account);
     }

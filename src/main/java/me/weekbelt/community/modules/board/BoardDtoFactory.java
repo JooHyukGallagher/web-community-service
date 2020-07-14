@@ -1,6 +1,7 @@
 package me.weekbelt.community.modules.board;
 
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.board.form.BoardListElementForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.form.BoardReadForm;
 
@@ -18,14 +19,26 @@ public class BoardDtoFactory {
                 .build();
     }
 
-    public static BoardReadForm boardToBoardResponseForm(Board board) {
-        return BoardReadForm.builder()
+    public static BoardListElementForm boardToBoardListElementForm(Board board) {
+        return BoardListElementForm.builder()
                 .id(board.getId())
                 .title(board.getTitle())
-                .boardType(board.getBoardType())
-                .content(board.getContent())
+                .nickname(board.getAccount().getNickname())
                 .createdDateTime(board.getCreatedDateTime())
                 .viewCount(board.getViewCount())
                 .build();
+    }
+
+    public static BoardReadForm boardToBoardReadForm(Board board) {
+       return BoardReadForm.builder()
+               .id(board.getId())
+               .boardType(board.getBoardType())
+               .title(board.getTitle())
+               .content(board.getContent())
+               .createdDateTime(board.getCreatedDateTime())
+               .viewCount(board.getViewCount())
+               .nickname(board.getAccount().getNickname())
+               .profileImage(board.getAccount().getProfileImage())
+               .build();
     }
 }

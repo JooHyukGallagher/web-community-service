@@ -46,17 +46,6 @@ public class Account {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    public static Account createAccountFromSignUpForm(SignUpForm signUpForm, PasswordEncoder passwordEncoder){
-        return Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .emailVerified(false)
-                .joinedAt(LocalDateTime.now())
-                .build();
-    }
-
-
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
         this.emailCheckTokenGeneratedAt = LocalDateTime.now();
