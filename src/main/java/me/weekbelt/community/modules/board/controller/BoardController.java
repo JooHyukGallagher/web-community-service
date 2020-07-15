@@ -6,6 +6,7 @@ import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
+import me.weekbelt.community.modules.board.form.BoardReadForm;
 import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
@@ -19,10 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -127,6 +126,21 @@ public class BoardController {
         } else {
             boardService.createBoard(account, boardWriteForm);
             return "redirect:/boards";
+        }
+    }
+
+    @DeleteMapping("/boards/{id}")
+    public String deleteBoard(@PathVariable Long id, @RequestParam String title,
+                              RedirectAttributes attributes) {
+        Board board = boardRepository.findById(id).orElse(null);
+        assert board != null;
+        if(title.equals(board.getTitle())) {
+            boardService.removeBoard(board);
+            attributes.addFlashAttribute("message", "게시글을 삭제했습니다.");
+            return "redirect:/boards";
+        } else {
+            attributes.addFlashAttribute("message", "게시글 제목을 정확히 입력해주세요.");
+            return "redirect:/boards/" + board.getId();
         }
     }
 }

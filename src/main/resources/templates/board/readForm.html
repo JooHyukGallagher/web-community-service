@@ -3,6 +3,7 @@
 <head th:replace="fragments/fragments.html :: head"></head>
 <body class="bg-light">
 <div th:replace="fragments/fragments.html :: main-nav"></div>
+<div th:replace="fragments/fragments.html :: message"></div>
 <div class="container">
     <div class="row justify-content-center">
         <div class="border border-secondary my-4 p-4" style="width: 100%;">
@@ -33,11 +34,39 @@
             <div class="pull-left">
                 <a href="/boards?boardType=all" class="btn btn-outline-dark">목록으로</a>
             </div>
-            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
+            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}" style="margin-left: 10px">
                 <a class="btn btn-secondary" th:href="@{/boards/{id}/update(id=${boardReadForm.id})}">수정</a>
             </div>
-        </div>
+            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
+                <button class="btn btn-danger" data-toggle="modal" data-target="#checkDeleteBoard">삭제</button>
+            </div>
 
+            <!--modal-->
+            <div class="modal fade" id="checkDeleteBoard" tabindex="-1" role="dialog" aria-labelledby="leaveTitle"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="leaveTitle" th:text="${boardReadForm.title}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>게시글을 삭제하시겠습니까??</p>
+                            <p><strong>삭제</strong>하시려면 게시글의 제목을 똑같이 타이핑 해주세요.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form th:action="@{'/boards/' + ${id}}" th:method="delete">
+                                <input type="text" name="title">
+                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">삭제</button>
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div th:replace="fragments/fragments.html :: footer"></div>

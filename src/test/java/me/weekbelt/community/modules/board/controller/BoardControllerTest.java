@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
@@ -284,5 +283,45 @@ class BoardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(view().name("board/updateForm"));
+    }
+
+    @DisplayName("게시글 삭제 - 성공")
+    @WithAccount("joohyuk")
+    @Test
+    public void deleteBoard_success() throws Exception {
+        // given
+        Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
+        Board board = boardFactory.createBoard(joohyuk);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId())
+                .param("title", board.getTitle())
+                .with(csrf()));
+
+        // then
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(redirectedUrl("/boards"));
+    }
+
+    @DisplayName("게시글 삭제 - 실패 (타이틀 똑같이 입력 X)")
+    @WithAccount("joohyuk")
+    @Test
+    public void deleteBoard_fail() throws Exception {
+        // given
+        Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
+        Board board = boardFactory.createBoard(joohyuk);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId())
+                .param("title", "다른 제목")
+                .with(csrf()));
+
+        // then
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(redirectedUrl("/boards/" + board.getId()));
     }
 }
