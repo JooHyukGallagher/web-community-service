@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -48,16 +49,21 @@ public class ReplyService {
                 .build();
     }
 
-    public void modifyReply(ReplyUpdateForm replyUpdateForm, Long replyId) {
+    public ReplyReadForm modifyReply(ReplyUpdateForm replyUpdateForm, Long replyId) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. replyId=" + replyId));
 
         reply.update(replyUpdateForm);
+
+        return ReplyDtoFactory.replyToReplyReadForm(reply);
     }
 
-    public void removeReply(Long replyId) {
+    public ReplyReadForm removeReply(Long replyId) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. replyId=" + replyId));
+        ReplyReadForm replyReadForm = ReplyDtoFactory.replyToReplyReadForm(reply);
+
         replyRepository.delete(reply);
+        return replyReadForm;
     }
 }

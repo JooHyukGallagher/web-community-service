@@ -7,10 +7,12 @@ import me.weekbelt.community.modules.account.WithAccount;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardFactory;
+import me.weekbelt.community.modules.reply.Reply;
 import me.weekbelt.community.modules.reply.ReplyFactory;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
-import me.weekbelt.community.modules.reply.form.ReplyList;
 import me.weekbelt.community.modules.reply.form.ReplyReadForm;
+import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
+import me.weekbelt.community.modules.reply.repository.ReplyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,6 +43,8 @@ class ReplyControllerTest {
     ReplyFactory replyFactory;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    ReplyRepository replyRepository;
 
     @DisplayName("댓글 추가 API - 성공")
     @WithAccount("joohyuk")
@@ -137,4 +140,105 @@ class ReplyControllerTest {
 //        assertThat(replyList.getReplyNum()).isEqualTo(26);
     }
 
+    @DisplayName("댓글 수정 API - 성공")
+    @WithAccount("joohyuk")
+    @Test
+    void modifyReply_success() throws Exception {
+        // given
+        Account account = accountRepository.findByNickname("joohyuk").get();
+        Board board = boardFactory.createBoard(account);
+        ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
+                .content("test reply")
+                .createdDateTime(LocalDateTime.now())
+                .modifiedDateTime(LocalDateTime.now())
+                .build();
+        Reply reply = replyFactory.createReply(account, board, replyCreateform);
+
+        ReplyUpdateForm replyUpdateForm = ReplyUpdateForm.builder()
+                .content("modify test reply")
+                .modifiedDateTime(LocalDateTime.now())
+                .build();
+
+        String requestUrl = "/boards/" + board.getId() + "/replies/" + reply.getId();
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put(requestUrl)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(replyUpdateForm))
+                .with(csrf()));
+
+        // then
+        resultActions.andExpect(status().isOk());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+        String contentAsString = response.getContentAsString();
+
+        ReplyReadForm replyReadForm = objectMapper.readValue(contentAsString, ReplyReadForm.class);
+
+        assertThat(replyReadForm.getContent()).isEqualTo("modify test reply");
+        assertThat(replyReadForm.getBoardId()).isEqualTo(board.getId());
+        assertThat(replyReadForm.getNickname()).isEqualTo(account.getNickname());
+    }
+
+    @DisplayName("댓글 수 API - 실패(내용 입력 x)")
+    @WithAccount("joohyuk")
+    @Test
+    void modifyReply_fail() throws Exception {
+        // given
+        Account account = accountRepository.findByNickname("joohyuk").get();
+        Board board = boardFactory.createBoard(account);
+        ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
+                .content("test reply")
+                .createdDateTime(LocalDateTime.now())
+                .modifiedDateTime(LocalDateTime.now())
+                .build();
+        Reply reply = replyFactory.createReply(account, board, replyCreateform);
+
+        ReplyUpdateForm replyUpdateForm = ReplyUpdateForm.builder()
+                .content("")
+                .modifiedDateTime(LocalDateTime.now())
+                .build();
+
+        String requestUrl = "/boards/" + board.getId() + "/replies/" + reply.getId();
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put(requestUrl)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(replyUpdateForm))
+                .with(csrf()));
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+
+    }
+
+    @DisplayName("댓글 삭제")
+    @WithAccount("joohyuk")
+    @Test
+    void removeReply() throws Exception {
+        // given
+        Account account = accountRepository.findByNickname("joohyuk").get();
+        Board board = boardFactory.createBoard(account);
+        ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
+                .content("test reply")
+                .createdDateTime(LocalDateTime.now())
+                .modifiedDateTime(LocalDateTime.now())
+                .build();
+        Reply reply = replyFactory.createReply(account, board, replyCreateform);
+
+        // when
+        String requestUrl = "/boards/" + board.getId() + "/replies/" + reply.getId();
+        ResultActions resultActions = mockMvc
+                .perform(delete(requestUrl)
+                .with(csrf()))
+                .andDo(print());
+
+        // then
+        MockHttpServletResponse response = resultActions.andReturn().getResponse();
+        ReplyReadForm replyReadForm = objectMapper.readValue(response.getContentAsString(), ReplyReadForm.class);
+
+        Reply resultReply = replyRepository.findById(replyReadForm.getBoardId()).orElse(null);
+        assertThat(resultReply).isEqualTo(null);
+    }
 }
