@@ -7,9 +7,10 @@ import me.weekbelt.community.modules.account.WithAccount;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardFactory;
+import me.weekbelt.community.modules.reply.ReplyFactory;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
+import me.weekbelt.community.modules.reply.form.ReplyList;
 import me.weekbelt.community.modules.reply.form.ReplyReadForm;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,9 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockMvcTest
@@ -31,20 +34,14 @@ class ReplyControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     BoardFactory boardFactory;
-
+    @Autowired
+    ReplyFactory replyFactory;
     @Autowired
     AccountRepository accountRepository;
-
-    @AfterEach
-    public void afterEach() {
-
-    }
 
     @DisplayName("댓글 추가 API - 성공")
     @WithAccount("joohyuk")
@@ -106,4 +103,38 @@ class ReplyControllerTest {
         resultActions.andExpect(status().isBadRequest());
 
     }
+
+    @Test
+    @WithAccount("joohyuk")
+    @DisplayName("댓글 리스트 불러오기")
+    void replyList() throws Exception {
+        // given
+        Account account = accountRepository.findByNickname("joohyuk").get();
+        Board board = boardFactory.createBoard(account);
+
+        for (int i = 1; i <= 36; i++) {
+            ReplyCreateForm replyCreateForm = ReplyCreateForm.builder()
+                    .content("reply test " + i)
+                    .createdDateTime(LocalDateTime.now())
+                    .modifiedDateTime(LocalDateTime.now())
+                    .build();
+            replyFactory.createReply(account, board, replyCreateForm);
+        }
+
+        // when
+        String requestUrl = "/boards/" + board.getId() + "/replies?page=1&sort=id,desc";
+        ResultActions resultActions = mockMvc.perform(get(requestUrl));
+
+        // then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // TODO: Page 직렬
+//        MockHttpServletResponse response = resultActions.andReturn().getResponse();
+//        ReplyList replyList = objectMapper.readValue(response.getContentAsString(), ReplyList.class);
+//
+//        assertThat(replyList.getReplyNum()).isEqualTo(26);
+    }
+
 }

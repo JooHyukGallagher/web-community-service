@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
+import me.weekbelt.community.modules.reply.form.ReplyList;
 import me.weekbelt.community.modules.reply.form.ReplyReadForm;
 import me.weekbelt.community.modules.reply.service.ReplyService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
+    // TODO: 댓글 도배기능
     @PostMapping
     public ResponseEntity<?> createReply(@CurrentAccount Account account,
                                          @RequestBody @Valid ReplyCreateForm replyCreateForm,
@@ -32,5 +36,14 @@ public class ReplyController {
 
         ReplyReadForm replyReadForm = replyService.createReply(replyCreateForm, account.getNickname(), boardId);
         return ResponseEntity.ok(replyReadForm);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> replyList(@CurrentAccount Account account,
+                                       @PathVariable Long boardId,
+                                       @PageableDefault(size = 10) Pageable pageable) {
+
+        ReplyList replyList = replyService.getReplyList(boardId, pageable);
+        return ResponseEntity.ok(replyList);
     }
 }

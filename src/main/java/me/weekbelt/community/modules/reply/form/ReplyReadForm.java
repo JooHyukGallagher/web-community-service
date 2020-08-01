@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class ReplyReadForm {
 
+    private Long id;
+
     private Long boardId;
 
     private String nickname;

@@ -21,6 +21,7 @@ public class ReplyDtoFactory {
 
     public static ReplyReadForm replyToReplyReadForm(Reply reply) {
         return ReplyReadForm.builder()
+                .id(reply.getId())
                 .boardId(reply.getBoard().getId())
                 .nickname(reply.getAccount().getNickname())
                 .content(reply.getContent())
