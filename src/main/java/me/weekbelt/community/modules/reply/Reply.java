@@ -1,9 +1,6 @@
 package me.weekbelt.community.modules.reply;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
@@ -12,7 +9,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Builder
-@Getter @NoArgsConstructor @EqualsAndHashCode(of = "id")
+@Getter
+@AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode(of = "id")
 @Entity
 public class Reply {
 

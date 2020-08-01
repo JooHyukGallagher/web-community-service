@@ -13,6 +13,7 @@ import me.weekbelt.community.modules.reply.form.ReplyReadForm;
 import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
 import me.weekbelt.community.modules.reply.repository.ReplyRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class ReplyService {
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
 
-    public void createReply(ReplyCreateForm replyCreateForm, String nickname, Long boardId) {
+    public ReplyReadForm createReply(ReplyCreateForm replyCreateForm, String nickname, Long boardId) {
         Account account = accountRepository.findByNickname(nickname)
                 .orElseThrow(() -> new IllegalArgumentException("해당 이름의 계정이 존재하지 않습니다. nickname=" + nickname));
         Board board = boardRepository.findById(boardId)
@@ -33,10 +34,12 @@ public class ReplyService {
 
         Reply reply = ReplyDtoFactory.replyCreateFormToReply(account, board, replyCreateForm);
         replyRepository.save(reply);
+
+        return ReplyDtoFactory.replyToReplyReadForm(reply);
     }
 
-    public ReplyList getReplyList(Long boardId) {
-        Page<Reply> replyList = replyRepository.findByBoardId(boardId);
+    public ReplyList getReplyList(Long boardId, Pageable pageable) {
+        Page<Reply> replyList = replyRepository.findByBoardId(boardId, pageable);
         Page<ReplyReadForm> replyReadList = ReplyDtoFactory.replyPageToReplyReadFormPage(replyList);
 
         return ReplyList.builder()
