@@ -40,7 +40,7 @@ public class ReplyService {
     }
 
     public ReplyList getReplyList(Long boardId, Pageable pageable) {
-        Page<Reply> replyList = replyRepository.findByBoardId(boardId, pageable);
+        Page<Reply> replyList = replyRepository.findByBoardIdOrderByIdDesc(boardId, pageable);
         Page<ReplyReadForm> replyReadList = ReplyDtoFactory.replyPageToReplyReadFormPage(replyList);
 
         return ReplyList.builder()
