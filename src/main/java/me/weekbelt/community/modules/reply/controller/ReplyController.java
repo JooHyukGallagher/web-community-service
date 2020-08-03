@@ -9,6 +9,7 @@ import me.weekbelt.community.modules.reply.form.ReplyReadForm;
 import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
 import me.weekbelt.community.modules.reply.service.ReplyService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -30,7 +31,7 @@ public class ReplyController {
                                          @PathVariable("boardId") Long boardId,
                                          Errors errors) {
 
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             // TODO: 정확한 에러메시지 전달
             return ResponseEntity.badRequest().build();
         }
@@ -41,7 +42,8 @@ public class ReplyController {
 
     @GetMapping
     public ResponseEntity<?> replyList(@CurrentAccount Account account, @PathVariable Long boardId,
-                                       @PageableDefault(size = 10) Pageable pageable) {
+                                       @PageableDefault(size = 10, sort = "id",
+                                               direction = Sort.Direction.DESC) Pageable pageable) {
 
         ReplyList replyList = replyService.getReplyList(boardId, pageable);
         return ResponseEntity.ok(replyList);

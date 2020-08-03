@@ -12,6 +12,7 @@ import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import me.weekbelt.community.modules.board.service.BoardService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,7 +36,8 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     @GetMapping("/boards")
-    public String boards(@CurrentAccount Account account, @PageableDefault Pageable pageable,
+    public String boards(@CurrentAccount Account account, @PageableDefault(size = 10, sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable,
                          @RequestParam(defaultValue = "ALL") String boardType, Model model) {
         model.addAttribute("account", account);
         model.addAttribute("boards", boardService.findBoardList(boardType, pageable));
@@ -148,7 +150,7 @@ public class BoardController {
                               RedirectAttributes attributes) {
         Board board = boardRepository.findById(id).orElse(null);
         assert board != null;
-        if(title.equals(board.getTitle())) {
+        if (title.equals(board.getTitle())) {
             boardService.removeBoard(board);
             attributes.addFlashAttribute("message", "게시글을 삭제했습니다.");
             return "redirect:/boards?boardType=" + boardType + "&page=" + page;
