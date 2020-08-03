@@ -32,7 +32,7 @@
             </div>
 
             <div class="pull-left">
-                <a href="/boards?boardType=all" class="btn btn-outline-dark">목록으로</a>
+                <a th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}" class="btn btn-outline-dark">목록으로</a>
             </div>
             <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}" style="margin-left: 10px">
                 <a class="btn btn-secondary" th:href="@{/boards/{id}/update(id=${boardReadForm.id})}">수정</a>

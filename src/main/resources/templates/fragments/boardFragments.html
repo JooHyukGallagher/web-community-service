@@ -43,7 +43,7 @@
         <tr th:each="board : ${boards}">
             <td th:text="${board.id}" scope="row">1</td>
             <td>
-                <a th:href="@{'/boards/' + ${board.id}}" th:text="${board.title}">
+                <a th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}" th:text="${board.title}">
                     제목
                 </a>
             </td>

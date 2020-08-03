@@ -40,14 +40,20 @@ public class BoardController {
         model.addAttribute("account", account);
         model.addAttribute("boards", boardService.findBoardList(boardType, pageable));
         model.addAttribute("boardType", boardType);
+        model.addAttribute("currentPage", pageable.getPageNumber());
+
         return "board/" + boardType;
     }
 
     @GetMapping("/boards/{id}")
     public String readBoard(@CurrentAccount Account account, @PathVariable Long id,
-                            Model model) {
+                            Model model,
+                            @RequestParam Integer page, @RequestParam String boardType) {
         model.addAttribute("account", account);
         model.addAttribute("boardReadForm", boardService.findBoardReadFormById(id));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("boardType", boardType);
+
         return "board/readForm";
     }
 
