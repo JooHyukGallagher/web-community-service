@@ -48,18 +48,19 @@ public class BoardController {
     @GetMapping("/boards/{id}")
     public String readBoard(@CurrentAccount Account account, @PathVariable Long id,
                             Model model,
-                            @RequestParam Integer page, @RequestParam String boardType) {
+                            @RequestParam String boardType, @RequestParam Integer page) {
         model.addAttribute("account", account);
         model.addAttribute("boardReadForm", boardService.findBoardReadFormById(id));
-        model.addAttribute("currentPage", page);
         model.addAttribute("boardType", boardType);
+        model.addAttribute("currentPage", page);
 
         return "board/readForm";
     }
 
     @GetMapping("/boards/{id}/update")
     public String updateBoardForm(@CurrentAccount Account account, @PathVariable Long id,
-                                  Model model) {
+                                  Model model,
+                                  @RequestParam String boardType, @RequestParam Integer page) {
         Board board = boardRepository.findBoardWithAccountById(id)
                 .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다."));
         BoardUpdateForm boardUpdateForm = BoardDtoFactory.boardToBoardUpdateForm(board);
@@ -67,6 +68,8 @@ public class BoardController {
         model.addAttribute("account", account);
         model.addAttribute("boardUpdateForm", boardUpdateForm);
         model.addAttribute("id", id);
+        model.addAttribute("boardType", boardType);
+        model.addAttribute("currentPage", page);
 
         return "board/updateForm";
     }
@@ -74,9 +77,11 @@ public class BoardController {
     @PostMapping("/boards/{id}/update")
     public String updateBoardSubmit(@CurrentAccount Account account, @PathVariable Long id,
                                     @Valid BoardUpdateForm boardUpdateForm, Errors errors,
-                                    Model model) {
+                                    Model model, @RequestParam Integer page) {
         if (errors.hasErrors()) {
             model.addAttribute("account", account);
+            model.addAttribute("boardType", boardUpdateForm.getBoardType());
+            model.addAttribute("currentPage", page);
             return "board/updateForm";
         }
 
@@ -85,16 +90,18 @@ public class BoardController {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 boardService.updateBoard(id, boardUpdateForm);
-                return "redirect:/boards/" + id;
+                return "redirect:/boards/" + id + "?boardType=" + boardUpdateForm.getBoardType() + "&page=" + page;
             } else {
                 model.addAttribute("account", account);
                 model.addAttribute("boardUpdateForm", boardUpdateForm);
                 model.addAttribute("message", "게시글을 공지로 수정 권한이 없습니다.");
+                model.addAttribute("boardType", boardUpdateForm.getBoardType());
+                model.addAttribute("currentPage", page);
                 return "board/updateForm";
             }
         } else {
             boardService.updateBoard(id, boardUpdateForm);
-            return "redirect:/boards/" + id;
+            return "redirect:/boards/" + id + "?boardType=" + boardUpdateForm.getBoardType() + "&page=" + page;
         }
     }
 
@@ -137,16 +144,17 @@ public class BoardController {
 
     @DeleteMapping("/boards/{id}")
     public String deleteBoard(@PathVariable Long id, @RequestParam String title,
+                              @RequestParam String boardType, @RequestParam Integer page,
                               RedirectAttributes attributes) {
         Board board = boardRepository.findById(id).orElse(null);
         assert board != null;
         if(title.equals(board.getTitle())) {
             boardService.removeBoard(board);
             attributes.addFlashAttribute("message", "게시글을 삭제했습니다.");
-            return "redirect:/boards";
+            return "redirect:/boards?boardType=" + boardType + "&page=" + page;
         } else {
             attributes.addFlashAttribute("message", "게시글 제목을 정확히 입력해주세요.");
-            return "redirect:/boards/" + board.getId();
+            return "redirect:/boards/" + board.getId() + "?boardType=" + boardType + "&page=" + page;
         }
     }
 }

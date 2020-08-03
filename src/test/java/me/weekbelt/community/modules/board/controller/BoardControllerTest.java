@@ -148,13 +148,16 @@ class BoardControllerTest {
         Board board = boardFactory.createBoard(twins);
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId()));
+        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId() +
+                "?boardType=" + board.getBoardType() + "&page=1"));
 
         // then
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("boardReadForm"))
+                .andExpect(model().attributeExists("boardType"))
+                .andExpect(model().attributeExists("currentPage"))
                 .andExpect(view().name("board/readForm"));
     }
 
@@ -167,7 +170,7 @@ class BoardControllerTest {
         Board board = boardFactory.createBoard(joohyuk);
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId() + "/update"));
+        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId() + "/update?boardType=" + board.getBoardType() + "&page=1"));
 
         // then
         resultActions
@@ -175,6 +178,8 @@ class BoardControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("boardUpdateForm"))
                 .andExpect(model().attributeExists("id"))
+                .andExpect(model().attributeExists("boardType"))
+                .andExpect(model().attributeExists("currentPage"))
                 .andExpect(view().name("board/updateForm"));
     }
 
@@ -191,12 +196,13 @@ class BoardControllerTest {
                 .param("title", "수정 공지 게시글")
                 .param("content", "공지로 수정한 게시글 입니다.")
                 .param("boardType", "NOTICE")
+                .param("page", "1")
                 .with(csrf()));
 
         // then
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards/" + board.getId()));
+                .andExpect(redirectedUrl("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1"));
 
         Board updatedBoard = boardRepository.findById(board.getId()).orElse(null);
         assert updatedBoard != null;
@@ -214,7 +220,7 @@ class BoardControllerTest {
         Board board = boardFactory.createBoard(joohyuk);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/boards/" + board.getId() + "/update")
+        ResultActions resultActions = mockMvc.perform(post("/boards/" + board.getId() + "/update?page=1")
                 .param("title", "수정 공지 게시글")
                 .param("content", "공지로 수정한 게시글 입니다.")
                 .param("boardType", "NOTICE")
@@ -226,6 +232,8 @@ class BoardControllerTest {
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("boardUpdateForm"))
                 .andExpect(model().attributeExists("message"))
+                .andExpect(model().attributeExists("boardType"))
+                .andExpect(model().attributeExists("currentPage"))
                 .andExpect(view().name("board/updateForm"));
 
         Board noneUpdatedBoard = boardRepository.findById(board.getId()).orElse(null);
@@ -249,12 +257,13 @@ class BoardControllerTest {
                 .param("title", "수정한 제목")
                 .param("content", "수정한 내용 입니다.")
                 .param("boardType", "PROMOTION")
+                .param("page", "1")
                 .with(csrf()));
 
         // then
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards/" + board.getId()));
+                .andExpect(redirectedUrl("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1"));
 
         Board updatedBoard = boardRepository.findById(board.getId()).orElse(null);
         assert updatedBoard != null;
@@ -276,12 +285,15 @@ class BoardControllerTest {
                 .param("title", "")
                 .param("content", "수정한 내용 입니다.")
                 .param("boardType", "PROMOTION")
+                .param("page", "1")
                 .with(csrf()));
 
         // then
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("boardType"))
+                .andExpect(model().attributeExists("currentPage"))
                 .andExpect(view().name("board/updateForm"));
     }
 
@@ -294,7 +306,7 @@ class BoardControllerTest {
         Board board = boardFactory.createBoard(joohyuk);
 
         // when
-        ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId())
+        ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1")
                 .param("title", board.getTitle())
                 .with(csrf()));
 
@@ -302,7 +314,7 @@ class BoardControllerTest {
         resultActions
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("message"))
-                .andExpect(redirectedUrl("/boards"));
+                .andExpect(redirectedUrl("/boards?boardType=" + board.getBoardType() + "&page=1"));
     }
 
     @DisplayName("게시글 삭제 - 실패 (타이틀 똑같이 입력 X)")
@@ -315,6 +327,8 @@ class BoardControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId())
+                .param("boardType", board.getBoardType().toString())
+                .param("page", "1")
                 .param("title", "다른 제목")
                 .with(csrf()));
 
@@ -322,6 +336,6 @@ class BoardControllerTest {
         resultActions
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("message"))
-                .andExpect(redirectedUrl("/boards/" + board.getId()));
+                .andExpect(redirectedUrl("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1"));
     }
 }

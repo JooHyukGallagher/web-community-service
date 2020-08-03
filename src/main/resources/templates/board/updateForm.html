@@ -9,7 +9,7 @@
         <h2>게시글 수정</h2>
     </div>
     <div class="row justify-content-center">
-        <form class="needs-validation col-sm-10" th:action="@{/boards/{id}/update(id=${id})}" method="post" th:object="${boardUpdateForm}" novalidate>
+        <form class="needs-validation col-sm-10" th:object="${boardUpdateForm}" th:action="@{'/boards/' + ${id} + '/update?page=' + ${currentPage}}" method="post" novalidate>
             <div class="form-group">
                 <label for="boardType">분류</label>
                 <select th:field="*{boardType}" class="custom-select mr-sm-2" id="boardType"
