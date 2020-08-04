@@ -41,7 +41,32 @@
                 <button class="btn btn-danger" data-toggle="modal" data-target="#checkDeleteBoard">삭제</button>
             </div>
 
-            <!--modal-->
+            <!--TODO: 디자인-->
+            <div id="replyInput" style="margin-top: 100px">
+                <div class="">
+                    <div class="mb-3">
+                        <label for="validationTextarea" id="createReplyLabel">댓글 남기기</label>
+                        <textarea class="form-control" id="validationTextarea" placeholder="댓글을 남겨주세요" required></textarea>
+                    </div>
+                    <button class="btn btn-primary pull-right" type="submit" id="replyAddBtn">댓글 작성</button>
+                </div>
+            </div>
+
+            <div class="timeline" style="margin-top: 100px">
+                <!--timeline time label-->
+                <div class="time-label" id="repliesDiv">
+                    <span class="bg-green" id="replyListTitle">댓글 목록</span>
+                </div>
+            </div>
+
+            <!--댓글 Pagination-->
+            <div class="text-center">
+                <ul id="pagination" class="pagination pagination-sm no-margin">
+
+                </ul>
+            </div>
+
+            <!--게시글 삭제 확인 모달 -->
             <div class="modal fade" id="checkDeleteBoard" tabindex="-1" role="dialog" aria-labelledby="leaveTitle"
                  aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -69,6 +94,33 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="boardId" th:value="${id}">
+
+
+<script id="template" type="text/x-handlebars-template">
+    {{#each .}}
+        <div class="col-md-12 comment" data-id="{{id}}">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="/profile/{{nickname}}">
+                            <span class="user-violet">{{nickname}}</span>
+                        </a>
+                        <span class="fromNow">{{createdDateTime}}</span>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <div class="content" style="line-height: 30px;">{{content}}</div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
+<script src="/js/global.js"></script>
+<script src="/js/reply/reply.js"></script>
+
 <div th:replace="fragments/fragments.html :: footer"></div>
 <div th:replace="fragments/fragments.html :: editor-script"></div>
 </body>
