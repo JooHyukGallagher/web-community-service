@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
-import me.weekbelt.community.modules.reply.form.ReplyList;
 import me.weekbelt.community.modules.reply.form.ReplyReadForm;
 import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
 import me.weekbelt.community.modules.reply.service.ReplyService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -45,7 +45,7 @@ public class ReplyController {
                                        @PageableDefault(size = 10, sort = "id",
                                                direction = Sort.Direction.DESC) Pageable pageable) {
 
-        ReplyList replyList = replyService.getReplyList(boardId, pageable);
+        Page<ReplyReadForm> replyList = replyService.getReplyList(boardId, pageable);
         return ResponseEntity.ok(replyList);
     }
 
