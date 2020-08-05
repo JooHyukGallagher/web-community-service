@@ -5,36 +5,9 @@ const reply = {
             this.printPaging(r, 10);
         });
 
-        const pageButton = document.querySelector(".pagination");
-        pageButton.addEventListener("click", (evt) => {
-            evt.preventDefault();
-            const requestPageNum = evt.target.text;
-            this.requestReplyList(requestPageNum-1, 10).then(r => {
-                this.printReplyList(r);
-                this.printPaging(r, 10);
-            })
-        });
+        this.regPageClickEvent();
+        this.regCreateReplyEvent();
 
-       const replyAddButton = document.querySelector("#replyAddBtn");
-       replyAddButton.addEventListener("click", async (evt) => {
-           const replyObj = document.querySelector("#newReplyWriter");
-           const createReplyForm = {
-               content: replyObj.value,
-               boardWriterNickname: document.querySelector("#nickname").value
-           }
-
-           const boardId = document.querySelector("#boardId").value;
-           const requestUrl = "/boards/" + boardId + "/replies";
-           const replyReadForm = await ajax("POST", requestUrl, createReplyForm);
-           alert("등록 되었습니다.");
-
-           replyObj.value = "";
-
-           this.requestReplyList(0, 10).then(r => {
-               this.printReplyList(r);
-               this.printPaging(r, 10);
-           })
-       })
     },
     requestReplyList: async function (page, size) {
         if (size > 10000) {
@@ -101,6 +74,39 @@ const reply = {
 
         let paginationContainer = document.querySelector(".pagination");
         paginationContainer.innerHTML = str;
+    },
+    regPageClickEvent: function () {
+        const pageButton = document.querySelector(".pagination");
+        pageButton.addEventListener("click", (evt) => {
+            evt.preventDefault();
+            const requestPageNum = evt.target.text;
+            this.requestReplyList(requestPageNum-1, 10).then(r => {
+                this.printReplyList(r);
+                this.printPaging(r, 10);
+            })
+        });
+    },
+    regCreateReplyEvent: function () {
+        const replyAddButton = document.querySelector("#replyAddBtn");
+        replyAddButton.addEventListener("click", async (evt) => {
+            const replyObj = document.querySelector("#newReplyWriter");
+            const createReplyForm = {
+                content: replyObj.value,
+                boardWriterNickname: document.querySelector("#nickname").value
+            }
+
+            const boardId = document.querySelector("#boardId").value;
+            const requestUrl = "/boards/" + boardId + "/replies";
+            const replyReadForm = await ajax("POST", requestUrl, createReplyForm);
+            alert("등록 되었습니다.");
+
+            replyObj.value = "";
+
+            this.requestReplyList(0, 10).then(r => {
+                this.printReplyList(r);
+                this.printPaging(r, 10);
+            })
+        })
     }
 }
 
