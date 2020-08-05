@@ -24,6 +24,7 @@ const ajax = async (method, url, data, property) => {
         console.log("Error:", e);
     }
 }
+
 // document.addEventListener("DOMContentLoaded", () => {
 //    initGlobalEvent();
 // });

@@ -32,10 +32,13 @@
             </div>
 
             <div class="pull-left">
-                <a th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}" class="btn btn-outline-dark">목록으로</a>
+                <a th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
+                   class="btn btn-outline-dark">목록으로</a>
             </div>
-            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}" style="margin-left: 10px">
-                <a class="btn btn-secondary" th:href="@{'/boards/' + ${id} + '/update?boardType=' + ${boardType} + '&page=' + ${currentPage}}">수정</a>
+            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}"
+                 style="margin-left: 10px">
+                <a class="btn btn-secondary"
+                   th:href="@{'/boards/' + ${id} + '/update?boardType=' + ${boardType} + '&page=' + ${currentPage}}">수정</a>
             </div>
             <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
                 <button class="btn btn-danger" data-toggle="modal" data-target="#checkDeleteBoard">삭제</button>
@@ -46,7 +49,8 @@
                 <div class="">
                     <div class="mb-3">
                         <label for="validationTextarea" id="createReplyLabel">댓글 남기기</label>
-                        <textarea class="form-control" id="validationTextarea" placeholder="댓글을 남겨주세요" required></textarea>
+                        <textarea class="form-control" id="validationTextarea" placeholder="댓글을 남겨주세요"
+                                  required></textarea>
                     </div>
                     <button class="btn btn-primary pull-right" type="submit" id="replyAddBtn">댓글 작성</button>
                 </div>
@@ -60,11 +64,11 @@
             </div>
 
             <!--댓글 Pagination-->
-            <div class="text-center">
-                <ul id="pagination" class="pagination pagination-sm no-margin">
-
+            <nav>
+                <ul class="pagination pagination-sm justify-content-center">
+                    <!--페이지 버튼 삽입-->
                 </ul>
-            </div>
+            </nav>
 
             <!--게시글 삭제 확인 모달 -->
             <div class="modal fade" id="checkDeleteBoard" tabindex="-1" role="dialog" aria-labelledby="leaveTitle"
@@ -82,7 +86,8 @@
                             <p><strong>삭제</strong>하시려면 게시글의 제목을 똑같이 타이핑 해주세요.</p>
                         </div>
                         <div class="modal-footer">
-                            <form th:action="@{'/boards/' + ${id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}" th:method="delete">
+                            <form th:action="@{'/boards/' + ${id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}"
+                                  th:method="delete">
                                 <input type="text" name="title">
                                 <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">삭제</button>
                             </form>
