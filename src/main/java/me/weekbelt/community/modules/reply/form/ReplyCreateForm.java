@@ -15,6 +15,8 @@ public class ReplyCreateForm {
     @NotBlank
     private String content;
 
+    private String boardWriterNickname;
+
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
 }

@@ -5,7 +5,7 @@ const reply = {
             this.printPaging(r, 10);
         });
 
-        let pageButton = document.querySelector(".pagination");
+        const pageButton = document.querySelector(".pagination");
         pageButton.addEventListener("click", (evt) => {
             evt.preventDefault();
             const requestPageNum = evt.target.text;
@@ -14,6 +14,27 @@ const reply = {
                 this.printPaging(r, 10);
             })
         });
+
+       const replyAddButton = document.querySelector("#replyAddBtn");
+       replyAddButton.addEventListener("click", async (evt) => {
+           const replyObj = document.querySelector("#newReplyWriter");
+           const createReplyForm = {
+               content: replyObj.value,
+               boardWriterNickname: document.querySelector("#nickname").value
+           }
+
+           const boardId = document.querySelector("#boardId").value;
+           const requestUrl = "/boards/" + boardId + "/replies";
+           const replyReadForm = await ajax("POST", requestUrl, createReplyForm);
+           alert("등록 되었습니다.");
+
+           replyObj.value = "";
+
+           this.requestReplyList(0, 10).then(r => {
+               this.printReplyList(r);
+               this.printPaging(r, 10);
+           })
+       })
     },
     requestReplyList: async function (page, size) {
         if (size > 10000) {
@@ -39,8 +60,6 @@ const reply = {
         replyListContainer.innerHTML = replyElement;
     },
     printPaging: function (replyList) {
-        console.log(replyList);
-
         const pageableInfo = replyList.pageable;
 
         let endPage = (Math.ceil(replyList.number / pageableInfo.pageSize) * pageableInfo.pageSize);

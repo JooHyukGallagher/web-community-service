@@ -6,10 +6,12 @@ const ajax = async (method, url, data, property) => {
                 method: method
             });
         } else {
+            const token = document.querySelector("#_csrf").content;
             response = await fetch(url, {
                 method: method,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
                 },
                 body: JSON.stringify(data)
             });

@@ -48,8 +48,8 @@
             <div id="replyInput" style="margin-top: 100px">
                 <div class="">
                     <div class="mb-3">
-                        <label for="validationTextarea" id="createReplyLabel">댓글 남기기</label>
-                        <textarea class="form-control" id="validationTextarea" placeholder="댓글을 남겨주세요"
+                        <label for="newReplyWriter" id="createReplyLabel">댓글 남기기</label>
+                        <textarea class="form-control" id="newReplyWriter" name="content" placeholder="댓글을 남겨주세요"
                                   required></textarea>
                     </div>
                     <button class="btn btn-primary pull-right" type="submit" id="replyAddBtn">댓글 작성</button>
@@ -100,6 +100,7 @@
     </div>
 </div>
 <input type="hidden" id="boardId" th:value="${id}">
+<input type="hidden" id="nickname" th:value="${boardReadForm.nickname}">
 
 
 <script id="template" type="text/x-handlebars-template">
