@@ -1,4 +1,5 @@
 const reply = {
+    isValid: false,
     initReply: function () {
         this.requestReplyList(0, 10).then(r => {
             this.printReplyList(r)
@@ -7,7 +8,7 @@ const reply = {
 
         this.regPageClickEvent();
         this.regCreateReplyEvent();
-
+        this.regNewReplyWriterValidate();
     },
     requestReplyList: async function (page, size) {
         if (size > 10000) {
@@ -37,11 +38,11 @@ const reply = {
 
         let endPage = (Math.ceil(replyList.number / pageableInfo.pageSize) * pageableInfo.pageSize);
         let tempEndPage = replyList.totalPages;
-        if (endPage === 0 ||endPage > tempEndPage) {
+        if (endPage === 0 || endPage > tempEndPage) {
             endPage = tempEndPage;
         }
         let startPage = (endPage - pageableInfo.pageSize) + 1;
-        if(startPage < 0){
+        if (startPage < 0) {
             startPage = 1;
         }
         let prev = startPage !== 1;
@@ -57,10 +58,10 @@ const reply = {
         }
 
         for (let i = startPage, len = endPage; i <= len; i++) {
-            const isActive = replyList.number === (i-1) ? 'active' : '';
+            const isActive = replyList.number === (i - 1) ? 'active' : '';
             str +=
                 "<li class='page-item " + isActive + "'>\n" +
-                "   <a class='page-link' href='" + (i-1) + "'>" + i + "</a>\n" +
+                "   <a class='page-link' href='" + (i - 1) + "'>" + i + "</a>\n" +
                 "</li>"
         }
 
@@ -80,7 +81,7 @@ const reply = {
         pageButton.addEventListener("click", (evt) => {
             evt.preventDefault();
             const requestPageNum = evt.target.text;
-            this.requestReplyList(requestPageNum-1, 10).then(r => {
+            this.requestReplyList(requestPageNum - 1, 10).then(r => {
                 this.printReplyList(r);
                 this.printPaging(r, 10);
             })
@@ -95,18 +96,29 @@ const reply = {
                 boardWriterNickname: document.querySelector("#nickname").value
             }
 
-            const boardId = document.querySelector("#boardId").value;
-            const requestUrl = "/boards/" + boardId + "/replies";
-            const replyReadForm = await ajax("POST", requestUrl, createReplyForm);
-            alert("등록 되었습니다.");
+            if(!this.isValid) {
+                alert("글자수를 2자 이상 1000자 이하로 입력해주세요");
+            } else {
+                const boardId = document.querySelector("#boardId").value;
+                const requestUrl = "/boards/" + boardId + "/replies";
+                const replyReadForm = await ajax("POST", requestUrl, createReplyForm);
+                alert("등록 되었습니다.");
 
-            replyObj.value = "";
+                replyObj.value = "";
 
-            this.requestReplyList(0, 10).then(r => {
-                this.printReplyList(r);
-                this.printPaging(r, 10);
-            })
+                this.requestReplyList(0, 10).then(r => {
+                    this.printReplyList(r);
+                    this.printPaging(r, 10);
+                })
+            }
         })
+    },
+    regNewReplyWriterValidate: function () {
+        const newReplyWriter = document.querySelector("#newReplyWriter");
+        newReplyWriter.addEventListener("keyup", (evt) => {
+            let replyContent = evt.target.value;
+            this.isValid = (/^.{2,1000}$/).test(replyContent);
+        });
     }
 }
 
