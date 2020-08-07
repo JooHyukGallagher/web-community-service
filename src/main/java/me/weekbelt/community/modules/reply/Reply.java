@@ -33,6 +33,6 @@ public class Reply {
 
     public void update(ReplyUpdateForm replyUpdateForm) {
         this.content = replyUpdateForm.getContent();
-        this.modifiedDateTime = replyUpdateForm.getModifiedDateTime();
+        this.modifiedDateTime = LocalDateTime.now();
     }
 }

@@ -26,3 +26,7 @@
 .pagination {
     margin-top: 20px;
 }
+
+.panel-title {
+    display: inline;
+}

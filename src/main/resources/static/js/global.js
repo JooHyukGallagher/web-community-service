@@ -1,12 +1,17 @@
 const ajax = async (method, url, data, property) => {
+    const token = document.querySelector("#_csrf").content;
+
     let response;
     try {
         if(data == null) {
             response = await fetch(url, {
-                method: method
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                },
             });
         } else {
-            const token = document.querySelector("#_csrf").content;
             response = await fetch(url, {
                 method: method,
                 headers: {

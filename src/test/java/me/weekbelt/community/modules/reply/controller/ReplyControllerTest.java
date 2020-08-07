@@ -156,7 +156,7 @@ class ReplyControllerTest {
 
         ReplyUpdateForm replyUpdateForm = ReplyUpdateForm.builder()
                 .content("modify test reply")
-                .modifiedDateTime(LocalDateTime.now())
+//                .modifiedDateTime(LocalDateTime.now())
                 .build();
 
         String requestUrl = "/boards/" + board.getId() + "/replies/" + reply.getId();
@@ -197,7 +197,7 @@ class ReplyControllerTest {
 
         ReplyUpdateForm replyUpdateForm = ReplyUpdateForm.builder()
                 .content("")
-                .modifiedDateTime(LocalDateTime.now())
+//                .modifiedDateTime(LocalDateTime.now())
                 .build();
 
         String requestUrl = "/boards/" + board.getId() + "/replies/" + reply.getId();

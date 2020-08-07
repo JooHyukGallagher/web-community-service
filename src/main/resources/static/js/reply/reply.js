@@ -1,5 +1,6 @@
 const reply = {
     isValid: false,
+    currentAccountNickname: document.querySelector("#currentAccountNickname").value,
     initReply: function () {
         this.requestReplyList(0, 10).then(r => {
             this.printReplyList(r)
@@ -24,6 +25,10 @@ const reply = {
             moment.locale('ko');
             reply.createdDateTime = moment(reply.createdDateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
             reply.modifiedDateTime = moment(reply.modifiedDateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
+
+            if (reply.nickname === this.currentAccountNickname) {
+                reply.isWriter = true;
+            }
         });
 
         const replyElementTemplate = document.querySelector("#template").innerHTML;
@@ -96,7 +101,7 @@ const reply = {
                 boardWriterNickname: document.querySelector("#nickname").value
             }
 
-            if(!this.isValid) {
+            if (!this.isValid) {
                 alert("글자수를 2자 이상 1000자 이하로 입력해주세요");
             } else {
                 const boardId = document.querySelector("#boardId").value;
@@ -118,6 +123,48 @@ const reply = {
         newReplyWriter.addEventListener("keyup", (evt) => {
             let replyContent = evt.target.value;
             this.isValid = (/^.{2,1000}$/).test(replyContent);
+        });
+    },
+    modifyReply: function (replyId) {
+        const replyModifyButton = document.querySelector("#replyModifyButton");
+        replyModifyButton.addEventListener("click", async () => {
+            this.regUpdateReplyWriter();
+
+            if (!this.isValid) {
+                alert("글자수를 2자 이상 1000자 이하로 입력해주세요")
+            } else {
+                const boardId = document.querySelector("#boardId").value;
+                const requestUrl = "/boards/" + boardId + "/replies/" + replyId;
+                const data = {
+                    content: document.querySelector("#modifyReplyWriter").value
+                }
+
+                const replyReadForm = await ajax("PUT", requestUrl, data);
+                alert("수정 되었습니다.");
+
+                const href = document.querySelector("#boardRequestUrl").value;
+                window.location.href = href;
+            }
+        });
+    },
+    regUpdateReplyWriter: function () {
+        const modifyReplyWriter = document.querySelector("#modifyReplyWriter");
+        modifyReplyWriter.addEventListener("keyup", (evt) => {
+            let replyContent = evt.target.value;
+            this.isValid = (/^.{2,1000}$/).test(replyContent);
+        })
+    },
+    deleteReply: async function (replyId) {
+        const replyDeleteButton = document.querySelector("#replyDeleteButton");
+        replyDeleteButton.addEventListener("click", async () => {
+            const boardId = document.querySelector("#boardId").value;
+            const requestUrl = "/boards/" + boardId + "/replies/" + replyId;
+
+            const replyReadForm = await ajax("DELETE", requestUrl);
+            alert("삭제 되었습니다.");
+
+            const href = document.querySelector("#boardRequestUrl").value;
+            window.location.href = href;
         });
     }
 }
