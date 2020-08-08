@@ -8,7 +8,7 @@
     <div th:replace="fragments/boardFragments.html :: board-type(type = 'promotion')"></div>
     <div th:replace="fragments/boardFragments.html :: board-list(boards=${boards.content})"></div>
     <nav th:replace="fragments/boardFragments.html :: board-pagination(boardType=${boardType}, boardPages=${boards})"></nav>
-    <a href="/new-board" class="btn btn-dark mt-3">글작성</a>
+    <div th:replace="fragments/boardFragments.html :: search"></div>
 </div>
 <div th:replace="fragments/fragments.html::footer"></div>
 <script th:replace="fragments/fragments.html :: date-time"></script>

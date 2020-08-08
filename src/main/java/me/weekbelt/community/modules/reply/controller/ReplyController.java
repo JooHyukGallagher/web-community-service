@@ -41,16 +41,15 @@ public class ReplyController {
     }
 
     @GetMapping
-    public ResponseEntity<?> replyList(@CurrentAccount Account account, @PathVariable Long boardId,
-                                       @PageableDefault(size = 10, sort = "id",
-                                               direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<?> replyList(@PathVariable Long boardId,
+                                       @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<ReplyReadForm> replyList = replyService.getReplyList(boardId, pageable);
         return ResponseEntity.ok(replyList);
     }
 
     @PutMapping("{replyId}")
-    public ResponseEntity<?> modifyReply(@CurrentAccount Account account, @PathVariable Long replyId,
+    public ResponseEntity<?> modifyReply(@PathVariable Long replyId,
                                          @RequestBody @Valid ReplyUpdateForm replyUpdateForm,
                                          Errors errors) {
         if (errors.hasErrors()) {
@@ -63,7 +62,7 @@ public class ReplyController {
     }
 
     @DeleteMapping("{replyId}")
-    public ResponseEntity<?> removeReply(@CurrentAccount Account account, @PathVariable Long replyId) {
+    public ResponseEntity<?> removeReply(@PathVariable Long replyId) {
         ReplyReadForm replyReadForm = replyService.removeReply(replyId);
         return ResponseEntity.ok(replyReadForm);
     }

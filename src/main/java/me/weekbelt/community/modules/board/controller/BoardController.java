@@ -6,7 +6,6 @@ import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
-import me.weekbelt.community.modules.board.form.BoardReadForm;
 import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.repository.BoardRepository;

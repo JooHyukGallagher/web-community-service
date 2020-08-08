@@ -43,7 +43,8 @@
         <tr th:each="board : ${boards}">
             <td th:text="${board.id}" scope="row">1</td>
             <td>
-                <a th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}" th:text="${board.title}">
+                <a th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}"
+                   th:text="${board.title}">
                     제목
                 </a>
             </td>
@@ -85,4 +86,36 @@
         </li>
     </ul>
 </nav>
+
+<div class="d-flex flex-row justify-content-end" th:fragment="search">
+<!--    <form th:object="${orderSearch}" class="form-inline">-->
+<!--        <div class="form-group mb-2">-->
+<!--            <input type="text" th:field="*{memberName}" class="form- control" placeholder="회원명"/>-->
+<!--        </div>-->
+<!--        <div class="form-group mx-sm-1 mb-2">-->
+<!--            <select th:field="*{orderStatus}" class="form-control">-->
+<!--                <option value="">주문상태</option>-->
+<!--                <option th:each="status : $ {T(jpabook.jpashop.domain.OrderStatus).values()}"-->
+<!--                        th:value="${status}"-->
+<!--                        th:text="${status}">option-->
+<!--                </option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary mb-2">검색</button>-->
+<!--    </form>-->
+
+        <form class="form-inline mr-2">
+            <div class="form-group" id="search-requirement">
+                <select class="form-control" name="searchCondition">
+                    <option value="all">전체</option>
+                    <option value="title">제목</option>
+                    <option value="nickname">작성자</option>
+                </select>
+            </div>
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">검색</button>
+        </form>
+    <a href="/new-board" class="btn btn-dark">글작성</a>
+</div>
+
 </html>

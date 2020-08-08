@@ -5,9 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.form.Profile;
-import me.weekbelt.community.modules.account.form.SignUpForm;
-import org.apache.tomcat.jni.Local;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
