@@ -56,8 +56,44 @@
     </table>
 </div>
 
-<nav aria-label="Page navigation" class="mt-5" th:fragment="board-pagination (boardType, boardPages)">
-    <ul class="pagination justify-content-center"
+<nav aria-label="Page navigation" class="mt-5" th:fragment="board-pagination (boardType, boardPages, boardSearch)">
+
+    <ul class="pagination justify-content-center" th:if="${boardSearch.searchCondition}"
+        th:with="startNumber=${T(Math).floor(boardPages.number/10)}*10+1,
+                 endNumber=(${boardPages.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${boardPages.totalPages}">
+
+        <li class="page-item">
+            <a class="page-link" aria-label="Previous"
+               th:href="@{'/boards?searchCondition='+ ${boardSearch.searchCondition} +
+               '&boardType=' + ${boardSearch.boardType}+ '&keyword=' + ${boardSearch.keyword} + '&page=1'}">&laquo;</a>
+        </li>
+
+        <li class="page-item" th:classappend="${boardPages.first} ? disabled">
+            <a class="page-link"
+               th:href="@{'/boards?searchCondition='+ ${boardSearch.searchCondition} + '&boardType=' + ${boardSearch.boardType}
+            + '&keyword=' + ${boardSearch.keyword} + '&page=' + ${boardPages.number}}">&lsaquo;</a>
+        </li>
+
+        <li class="page-item" th:each="page :${#numbers.sequence(startNumber, endNumber)}"
+            th:classappend="(${page} == ${boardPages.number} + 1) ? active">
+            <a class="page-link" th:href="@{'/boards?searchCondition='
+            + ${boardSearch.searchCondition} + '&boardType=' + ${boardSearch.boardType}
+            + '&keyword=' + ${boardSearch.keyword} + '&page=' + ${page}}" th:text="${page}"></a>
+        </li>
+
+        <li class="page-item" th:classappend="${boardPages.last} ? disabled">
+            <a class="page-link" th:href="@{'/boards?searchCondition='
+            + ${boardSearch.searchCondition} + '&boardType=' + ${boardSearch.boardType}
+            + '&keyword=' + ${boardSearch.keyword} + '&page=' + ${boardPages.number+2}}">&rsaquo;</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="@{'/boards?searchCondition='
+            + ${boardSearch.searchCondition} + '&boardType=' + ${boardSearch.boardType}
+            + '&keyword=' + ${boardSearch.keyword} + '&page=' + ${boardPages.totalPages}}">&raquo;</a>
+        </li>
+    </ul>
+
+    <ul class="pagination justify-content-center" th:unless="${boardSearch.searchCondition}"
         th:with="startNumber=${T(Math).floor(boardPages.number/10)}*10+1,
                  endNumber=(${boardPages.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${boardPages.totalPages}">
 
@@ -86,36 +122,4 @@
         </li>
     </ul>
 </nav>
-
-<div class="d-flex flex-row justify-content-end" th:fragment="search">
-<!--    <form th:object="${orderSearch}" class="form-inline">-->
-<!--        <div class="form-group mb-2">-->
-<!--            <input type="text" th:field="*{memberName}" class="form- control" placeholder="회원명"/>-->
-<!--        </div>-->
-<!--        <div class="form-group mx-sm-1 mb-2">-->
-<!--            <select th:field="*{orderStatus}" class="form-control">-->
-<!--                <option value="">주문상태</option>-->
-<!--                <option th:each="status : $ {T(jpabook.jpashop.domain.OrderStatus).values()}"-->
-<!--                        th:value="${status}"-->
-<!--                        th:text="${status}">option-->
-<!--                </option>-->
-<!--            </select>-->
-<!--        </div>-->
-<!--        <button type="submit" class="btn btn-primary mb-2">검색</button>-->
-<!--    </form>-->
-
-        <form class="form-inline mr-2">
-            <div class="form-group" id="search-requirement">
-                <select class="form-control" name="searchCondition">
-                    <option value="all">전체</option>
-                    <option value="title">제목</option>
-                    <option value="nickname">작성자</option>
-                </select>
-            </div>
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">검색</button>
-        </form>
-    <a href="/new-board" class="btn btn-dark">글작성</a>
-</div>
-
 </html>

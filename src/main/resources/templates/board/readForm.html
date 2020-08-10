@@ -31,7 +31,7 @@
                           readonly>내용</textarea>
             </div>
 
-            <div class="pull-left">
+            <div class="pull-left" id="toBoardList">
                 <a th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
                    class="btn btn-outline-dark">목록으로</a>
             </div>
@@ -154,7 +154,8 @@
 <input type="hidden" id="nickname" th:value="${boardReadForm.nickname}">
 <input type="hidden" id="currentAccountNickname" th:value="${account.nickname}">
 <input type="hidden" id="boardRequestUrl" th:value="'/boards/' + ${id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}">
-
+<!--<input type="hidden" id="nicknameKeyword" th:if="${nicknameKeyword}" th:value="${nicknameKeyword}">-->
+<!--<input type="hidden" id="titleKeyword" th:if="${titleKeyword}" th:value="${titleKeyword}">-->
 
 <script id="template" type="text/x-handlebars-template">
     {{#each .}}
@@ -185,6 +186,7 @@
 </script>
 <script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
 <script src="/js/global.js"></script>
+<script src="js/board/boardRead.js"></script>
 <script src="/js/reply/reply.js"></script>
 
 <div th:replace="fragments/fragments.html :: footer"></div>

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom{
 
     Page<Board> findAllByBoardTypeOrderByIdDesc(BoardType boardType, Pageable pageable);
 

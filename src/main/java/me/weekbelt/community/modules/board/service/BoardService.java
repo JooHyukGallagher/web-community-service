@@ -5,7 +5,6 @@ import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
-import me.weekbelt.community.modules.board.BoardType;
 import me.weekbelt.community.modules.board.form.*;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import org.springframework.data.domain.Page;
@@ -22,24 +21,12 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
 
-    public Page<BoardListElementForm> findBoardList(String boardType, Pageable pageable) {
+    public Page<BoardListElementForm> findBoardList(BoardSearch boardSearch, Pageable pageable) {
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1,
                 pageable.getPageSize());
 
-        Page<Board> boardList;
-        boardList = getBoardPageByBoardType(boardType, pageable);
-
+        Page<Board> boardList = boardRepository.findByBoardSearch(boardSearch, pageable);
         return boardList.map(BoardDtoFactory::boardToBoardListElementForm);
-    }
-
-    private Page<Board> getBoardPageByBoardType(String boardType, Pageable pageable) {
-        Page<Board> boardList;
-        if (boardType.equals("ALL")) {
-            boardList = boardRepository.findAllByOrderByIdDesc(pageable);
-        } else {
-            boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.valueOf(boardType), pageable);
-        }
-        return boardList;
     }
 
     public BoardReadForm findBoardReadFormById(Long id){

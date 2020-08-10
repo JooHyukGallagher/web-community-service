@@ -8,8 +8,22 @@
 <div class="container">
     <div th:replace="fragments/boardFragments.html :: board-type(type = ${boardType})"></div>
     <div th:replace="fragments/boardFragments.html :: board-list(boards=${boards.content})"></div>
-    <nav th:replace="fragments/boardFragments.html :: board-pagination(boardType=${boardType}, boardPages=${boards})"></nav>
-    <div th:replace="fragments/boardFragments.html :: search"></div>
+    <nav th:replace="fragments/boardFragments.html :: board-pagination(boardType=${boardType}, boardPages=${boards}, boardSearch=${boardSearch})"></nav>
+    <div class="d-flex flex-row justify-content-end" id="searchContainer">
+        <form class="form-inline mr-2" action="/boards" method="GET">
+            <div class="form-group" id="search-requirement">
+                <select class="form-control" name="searchCondition">
+                    <option value="TOTAL">전체</option>
+                    <option value="TITLE">제목</option>
+                    <option value="NICKNAME">작성자</option>
+                </select>
+            </div>
+            <input type="hidden" name="boardType" th:value="${boardType}">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">검색</button>
+        </form>
+        <a href="/new-board" class="btn btn-dark">글작성</a>
+    </div>
 </div>
 <div th:replace="fragments/fragments.html::footer"></div>
 <script th:replace="fragments/fragments.html :: date-time"></script>

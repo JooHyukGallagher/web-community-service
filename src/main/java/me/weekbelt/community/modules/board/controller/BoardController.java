@@ -6,10 +6,7 @@ import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
-import me.weekbelt.community.modules.board.form.BoardListElementForm;
-import me.weekbelt.community.modules.board.form.BoardSearch;
-import me.weekbelt.community.modules.board.form.BoardUpdateForm;
-import me.weekbelt.community.modules.board.form.BoardWriteForm;
+import me.weekbelt.community.modules.board.form.*;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import me.weekbelt.community.modules.board.service.BoardService;
 import org.springframework.data.domain.Page;
@@ -38,13 +35,16 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     @GetMapping("/boards")
-    public String boards(@CurrentAccount Account account, @PageableDefault(size = 10, sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable,
-                         @RequestParam(defaultValue = "ALL") String boardType, Model model) {
+    public String boards(@CurrentAccount Account account, Model model,
+                         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                         BoardSearch boardSearch) {
+
         model.addAttribute("account", account);
-        model.addAttribute("boards", boardService.findBoardList(boardType, pageable));
-        model.addAttribute("boardType", boardType);
+        model.addAttribute("boards", boardService.findBoardList(boardSearch, pageable));
+        model.addAttribute("boardType", boardSearch.getBoardType());
         model.addAttribute("currentPage", pageable.getPageNumber());
+
+        model.addAttribute("boardSearch", boardSearch);
 
         return "board/boardList";
     }
