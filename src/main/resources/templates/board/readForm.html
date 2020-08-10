@@ -32,9 +32,15 @@
             </div>
 
             <div class="pull-left" id="toBoardList">
-                <a th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
+                <a th:if="${boardSearch.searchCondition}" th:href="@{'/boards?searchCondition=' +${boardSearch.searchCondition}
+                    + '&boardType=' + ${boardSearch.boardType} + '&keyword=' + ${boardSearch.keyword}
+                    + '&page=' + ${currentPage}}"
+                   class="btn btn-outline-dark">목록으로</a>
+                <a th:unless="${boardSearch.searchCondition}"
+                   th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
                    class="btn btn-outline-dark">목록으로</a>
             </div>
+
             <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}"
                  style="margin-left: 10px">
                 <a class="btn btn-secondary"
@@ -153,9 +159,9 @@
 <input type="hidden" id="boardId" th:value="${id}">
 <input type="hidden" id="nickname" th:value="${boardReadForm.nickname}">
 <input type="hidden" id="currentAccountNickname" th:value="${account.nickname}">
-<input type="hidden" id="boardRequestUrl" th:value="'/boards/' + ${id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}">
-<!--<input type="hidden" id="nicknameKeyword" th:if="${nicknameKeyword}" th:value="${nicknameKeyword}">-->
-<!--<input type="hidden" id="titleKeyword" th:if="${titleKeyword}" th:value="${titleKeyword}">-->
+<input type="hidden" id="boardRequestUrl"
+       th:value="'/boards/' + ${id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}">
+<input type="hidden" id="boardSearch" th:value="${boardSearch}">
 
 <script id="template" type="text/x-handlebars-template">
     {{#each .}}
@@ -186,7 +192,7 @@
 </script>
 <script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
 <script src="/js/global.js"></script>
-<script src="js/board/boardRead.js"></script>
+<script src="/js/board/boardRead.js"></script>
 <script src="/js/reply/reply.js"></script>
 
 <div th:replace="fragments/fragments.html :: footer"></div>

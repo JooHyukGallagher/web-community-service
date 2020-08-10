@@ -9,7 +9,6 @@ import me.weekbelt.community.modules.board.BoardType;
 import me.weekbelt.community.modules.board.form.*;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import me.weekbelt.community.modules.board.service.BoardService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Iterator;
 
 @RequiredArgsConstructor
 @Controller
@@ -43,7 +41,6 @@ public class BoardController {
         model.addAttribute("boards", boardService.findBoardList(boardSearch, pageable));
         model.addAttribute("boardType", boardSearch.getBoardType());
         model.addAttribute("currentPage", pageable.getPageNumber());
-
         model.addAttribute("boardSearch", boardSearch);
 
         return "board/boardList";
@@ -52,12 +49,12 @@ public class BoardController {
     @GetMapping("/boards/{id}")
     public String readBoard(@CurrentAccount Account account, @PathVariable Long id,
                             Model model,
-                            @RequestParam String boardType, @RequestParam Integer page) {
+                            BoardSearch boardSearch, @RequestParam Integer page) {
         model.addAttribute("account", account);
         model.addAttribute("boardReadForm", boardService.findBoardReadFormById(id));
-        model.addAttribute("boardType", boardType);
+        model.addAttribute("boardType", boardSearch.getBoardType());
         model.addAttribute("currentPage", page);
-
+        model.addAttribute("boardSearch", boardSearch);
         return "board/readForm";
     }
 

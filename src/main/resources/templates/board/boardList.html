@@ -7,7 +7,7 @@
 <div th:replace="fragments/fragments.html :: message"></div>
 <div class="container">
     <div th:replace="fragments/boardFragments.html :: board-type(type = ${boardType})"></div>
-    <div th:replace="fragments/boardFragments.html :: board-list(boards=${boards.content})"></div>
+    <div th:replace="fragments/boardFragments.html :: board-list(boards=${boards.content}, boardSearch=${boardSearch})"></div>
     <nav th:replace="fragments/boardFragments.html :: board-pagination(boardType=${boardType}, boardPages=${boards}, boardSearch=${boardSearch})"></nav>
     <div class="d-flex flex-row justify-content-end" id="searchContainer">
         <form class="form-inline mr-2" action="/boards" method="GET">

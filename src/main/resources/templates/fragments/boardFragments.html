@@ -28,7 +28,7 @@
     </ul>
 </div>
 
-<div th:fragment="board-list (boards)">
+<div th:fragment="board-list (boards, boardSearch)">
     <table class="table table-striped mt-5">
         <thead>
         <tr>
@@ -43,7 +43,15 @@
         <tr th:each="board : ${boards}">
             <td th:text="${board.id}" scope="row">1</td>
             <td>
-                <a th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}"
+                <a th:if="${boardSearch.searchCondition}" th:href="@{'/boards/' + ${board.id}
+                    + '?searchCondition=' + ${boardSearch.searchCondition}
+                    + '&boardType=' + ${boardSearch.boardType} + '&keyword=' + ${boardSearch.keyword}
+                    + '&page=' + ${currentPage}}"
+                   th:text="${board.title}">
+                    제목
+                </a>
+                <a th:unless="${boardSearch.searchCondition}"
+                   th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}"
                    th:text="${board.title}">
                     제목
                 </a>
