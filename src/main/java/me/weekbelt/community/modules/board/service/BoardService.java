@@ -6,10 +6,7 @@ import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
-import me.weekbelt.community.modules.board.form.BoardListElementForm;
-import me.weekbelt.community.modules.board.form.BoardUpdateForm;
-import me.weekbelt.community.modules.board.form.BoardWriteForm;
-import me.weekbelt.community.modules.board.form.BoardReadForm;
+import me.weekbelt.community.modules.board.form.*;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,22 +34,10 @@ public class BoardService {
 
     private Page<Board> getBoardPageByBoardType(String boardType, Pageable pageable) {
         Page<Board> boardList;
-        switch (boardType) {
-            case "notice":
-                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.NOTICE, pageable);
-                break;
-            case "free":
-                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.FREE, pageable);
-                break;
-            case "question":
-                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.QUESTION, pageable);
-                break;
-            case "promotion":
-                boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.PROMOTION, pageable);
-                break;
-            default:
-                boardList = boardRepository.findAllByOrderByIdDesc(pageable);
-                break;
+        if (boardType.equals("ALL")) {
+            boardList = boardRepository.findAllByOrderByIdDesc(pageable);
+        } else {
+            boardList = boardRepository.findAllByBoardTypeOrderByIdDesc(BoardType.valueOf(boardType), pageable);
         }
         return boardList;
     }

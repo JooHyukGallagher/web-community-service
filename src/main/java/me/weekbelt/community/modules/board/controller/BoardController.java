@@ -6,10 +6,13 @@ import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardDtoFactory;
 import me.weekbelt.community.modules.board.BoardType;
+import me.weekbelt.community.modules.board.form.BoardListElementForm;
+import me.weekbelt.community.modules.board.form.BoardSearch;
 import me.weekbelt.community.modules.board.form.BoardUpdateForm;
 import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import me.weekbelt.community.modules.board.service.BoardService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -43,7 +46,7 @@ public class BoardController {
         model.addAttribute("boardType", boardType);
         model.addAttribute("currentPage", pageable.getPageNumber());
 
-        return "board/" + boardType;
+        return "board/boardList";
     }
 
     @GetMapping("/boards/{id}")
