@@ -1,5 +1,6 @@
 package me.weekbelt.community;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.board.Board;
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.stream.IntStream;
 
@@ -21,6 +23,11 @@ public class CommunityApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CommunityApplication.class, args);
+    }
+
+    @Bean
+    JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
     }
 
 }
