@@ -3,6 +3,7 @@ package me.weekbelt.community.modules.reply.controller;
 import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.CurrentAccount;
+import me.weekbelt.community.modules.reply.ReplyWriteValidator;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
 import me.weekbelt.community.modules.reply.form.ReplyReadForm;
 import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
 @RequiredArgsConstructor
 @RequestMapping("/boards/{boardId}/replies")
 @RestController
 public class ReplyController {
 
     private final ReplyService replyService;
+    private final ReplyWriteValidator replyWriteValidator;
 
     // TODO: 댓글 도배기능
     @PostMapping
@@ -30,10 +33,14 @@ public class ReplyController {
                                          @RequestBody @Valid ReplyCreateForm replyCreateForm,
                                          @PathVariable("boardId") Long boardId,
                                          Errors errors) {
-
+        // TODO: Errors 메시지 리턴
         if (errors.hasErrors()) {
-            // TODO: 정확한 에러메시지 전달
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        replyWriteValidator.validate(account, errors);
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors);
         }
 
         ReplyReadForm replyReadForm = replyService.createReply(replyCreateForm, account.getNickname(), boardId);
@@ -53,8 +60,7 @@ public class ReplyController {
                                          @RequestBody @Valid ReplyUpdateForm replyUpdateForm,
                                          Errors errors) {
         if (errors.hasErrors()) {
-            // TODO: 정확한 에러메시지 전달
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         ReplyReadForm replyReadForm = replyService.modifyReply(replyUpdateForm, replyId);

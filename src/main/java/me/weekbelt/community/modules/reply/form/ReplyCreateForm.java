@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class ReplyCreateForm {
 
     @Length(min = 2, max = 1000)
-    @NotBlank
     private String content;
 
     private String boardWriterNickname;
