@@ -1,10 +1,9 @@
 const board = {
     initBoard: function () {
-        this.showToBoardListbutton();
+        this.showToBoardListButton();
     },
-    showToBoardListbutton: function () {
+    showToBoardListButton: function () {
         const boardSearch = document.querySelector("#boardSearch").value;
-        console.log(boardSearch);
     }
 }
 

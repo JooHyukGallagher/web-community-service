@@ -16,7 +16,7 @@ const reply = {
             size = 10;
         }
         const boardId = document.querySelector("#boardId").value;
-        const requestUrl = "/boards/" + boardId + "/replies?page=" + page + "&size=" + size + "sort=id,desc";
+        const requestUrl = "/boards/" + boardId + "/replies?page=" + page + "&size=" + size + "&sort=id,desc";
         return await ajax("GET", requestUrl);
     },
     printReplyList: function (replyList) {
@@ -106,7 +106,7 @@ const reply = {
             } else {
                 const boardId = document.querySelector("#boardId").value;
                 const requestUrl = "/boards/" + boardId + "/replies";
-                const replyReadForm = await ajax("POST", requestUrl, createReplyForm);
+                const resultData = await ajax("POST", requestUrl, createReplyForm);
                 alert("등록 되었습니다.");
 
                 replyObj.value = "";

@@ -33,15 +33,15 @@ public class ReplyController {
                                          @RequestBody @Valid ReplyCreateForm replyCreateForm,
                                          @PathVariable("boardId") Long boardId,
                                          Errors errors) {
-        // TODO: Errors 메시지 리턴
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        replyWriteValidator.validate(account, errors);
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
-        }
+//        TODO: 이메일 체크시 badrequest 처리
+//        replyWriteValidator.validate(account, errors);
+//        if (errors.hasErrors()) {
+//            return ResponseEntity.badRequest().body(errors);
+//        }
 
         ReplyReadForm replyReadForm = replyService.createReply(replyCreateForm, account.getNickname(), boardId);
         return ResponseEntity.ok(replyReadForm);

@@ -48,7 +48,7 @@ const ajax = async (method, url, data, property) => {
     let response;
     try {
         response = await fetch(url, init);
-        const responseData = await response.json();
+        const responseData = response.json();
         if (property == null) {
             return responseData;
         }
