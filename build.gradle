@@ -24,7 +24,7 @@ plugins {
  * npm install start
  */
 node {
-    version = '12.13.1'
+    version = '14.10.1'
     download = true
     nodeModulesDir = file("${projectDir}/src/main/resources/static")
 }
