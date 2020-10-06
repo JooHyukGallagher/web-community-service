@@ -118,7 +118,7 @@ class BoardControllerTest {
         // then
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards"));
+                .andExpect(redirectedUrl("/boards?boardType=" + BoardType.FREE));
     }
 
     @DisplayName("일반 게시글 생성 - 실패(제목 빈칸)")

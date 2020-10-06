@@ -29,7 +29,7 @@ public class BoardService {
         return boardList.map(BoardDtoFactory::boardToBoardListElementForm);
     }
 
-    public BoardReadForm findBoardReadFormById(Long id){
+    public BoardReadForm findBoardReadFormById(Long id) {
         Board board = boardRepository.findBoardWithAccountById(id)
                 .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다. 요청한 게시글 ID=" + id));
         board.plusViewCount();

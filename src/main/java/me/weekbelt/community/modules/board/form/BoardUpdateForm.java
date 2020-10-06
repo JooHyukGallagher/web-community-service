@@ -4,6 +4,7 @@ import lombok.*;
 import me.weekbelt.community.modules.board.BoardType;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 
 @Builder

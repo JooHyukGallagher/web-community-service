@@ -139,7 +139,7 @@ public class BoardController {
             }
         } else {
             boardService.createBoard(account, boardWriteForm);
-            return "redirect:/boards";
+            return "redirect:/boards?boardType=" + boardWriteForm.getBoardType();
         }
     }
 
