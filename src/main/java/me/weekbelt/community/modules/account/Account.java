@@ -26,7 +26,6 @@ public class Account {
     @Column(unique = true)
     private String nickname;
 
-    @Column(unique = true)
     private String password;
 
     private boolean emailVerified;

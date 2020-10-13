@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static me.weekbelt.community.modules.board.QBoard.board;
-import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
@@ -25,13 +24,12 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     @Override
     public Page<Board> findByBoardSearch(BoardSearch boardSearch, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-
-        if (boardSearch.getSearchCondition() != null && isTotalSearch(boardSearch)) {
+        if (isTotalSearch(boardSearch)) {
             builder.and(board.title.containsIgnoreCase(boardSearch.getKeyword()));
             builder.or(board.account.nickname.containsIgnoreCase(boardSearch.getKeyword()));
-        } else if (boardSearch.getSearchCondition() != null && isTitleSearch(boardSearch)) {
+        } else if (isTitleSearch(boardSearch)) {
             builder.and(board.title.containsIgnoreCase(boardSearch.getKeyword()));
-        } else if (boardSearch.getSearchCondition() != null && isNicknameSearch(boardSearch)) {
+        } else if (isNicknameSearch(boardSearch)) {
             builder.and(board.account.nickname.containsIgnoreCase(boardSearch.getKeyword()));
         }
 
@@ -52,13 +50,18 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     private boolean isTotalSearch(BoardSearch boardSearch) {
-        return SearchCondition.valueOf(boardSearch.getSearchCondition()) == SearchCondition.TOTAL;
+        return boardSearch.getSearchCondition() != null &&
+                SearchCondition.valueOf(boardSearch.getSearchCondition()) == SearchCondition.TOTAL;
     }
 
     private boolean isTitleSearch(BoardSearch boardSearch) {
-        return SearchCondition.valueOf(boardSearch.getSearchCondition()) == SearchCondition.TITLE;
+        return boardSearch.getSearchCondition() != null &&
+                SearchCondition.valueOf(boardSearch.getSearchCondition()) == SearchCondition.TITLE;
     }
+
     private boolean isNicknameSearch(BoardSearch boardSearch) {
-        return SearchCondition.valueOf(boardSearch.getSearchCondition()) == SearchCondition.NICKNAME;
+        return boardSearch.getSearchCondition() != null &&
+                SearchCondition.valueOf(boardSearch.getSearchCondition()) == SearchCondition.NICKNAME;
     }
+
 }
