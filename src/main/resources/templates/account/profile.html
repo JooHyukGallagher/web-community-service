@@ -31,19 +31,19 @@
                 <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
                      aria-labelledby="v-pills-profile-tab">
                     <p th:if="${!#strings.isEmpty(account.occupation)}">
-                        <span><i class="fa fa-briefcase col-1"></i></span>
+                        <span><i class="fas fa-briefcase"></i></span>
                         <span th:text="${account.occupation}" class="col-9"></span>
                     </p>
                     <p th:if="${!#strings.isEmpty(account.location)}">
-                        <span><i class="fa fa-location-arrow col-1"></i></span>
+                        <span><i class="fas fa-location-arrow"></i></span>
                         <span th:text="${account.location}" class="col-9"></span>
                     </p>
                     <p th:if="${isOwner}">
-                        <span><i class="fa fa-envelope-o col-1"></i></span>
+                        <span><i class="far fa-envelope"></i></span>
                         <span th:text="${account.email}" class="col-9"></span>
                     </p>
                     <p th:if="${isOwner || account.emailVerified}">
-                        <span><i class="fa fa-calendar-o col-1"></i></span>
+                        <span><i class="far fa-calendar-alt"></i></span>
                         <span th:if="${isOwner && !account.emailVerified}" class="col-9">
                           <a th:href="@{'/check-email?email=' + ${account.email}}">가입을 완료하려면 이메일을 확인하세요.</a>
                       </span>
