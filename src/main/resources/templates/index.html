@@ -10,7 +10,7 @@
     <div class="container d-flex flex-column align-items-center justify-content-center" data-aos="fade-up">
         <h1><span th:if="${account != null}" th:text="${account.nickname + '님 '}"></span>커뮤니티 사이트에 오신걸 환영합니다!!</h1>
         <h2 th:if="${account == null}">서비스를 이용하시려면 회원가입을 해주세요</h2>
-        <a th:if="${account == null}" ref="/sign-up" class="btn-get-started scrollto">회원가입</a>
+        <a th:if="${account == null}" href="/sign-up" class="btn-get-started scrollto">회원가입</a>
         <img src="assets/img/hero-img.png" class="img-fluid hero-img" alt="" data-aos="zoom-in" data-aos-delay="150">
     </div>
 </section><!-- End Hero -->

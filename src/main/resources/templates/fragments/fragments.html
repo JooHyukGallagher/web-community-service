@@ -92,7 +92,7 @@
             <ul>
                 <li class="active"><a href="/">Home</a></li>
                 <li><a th:href="@{'/boards?boardType=ALL'}">게시판</a></li>
-                <li class="drop-down" sec:authorize="isAuthenticated()"><a href="#">Joohyuk</a>
+                <li class="drop-down" sec:authorize="isAuthenticated()"><a href="#" sec:authentication="name">Joohyuk</a>
                     <ul>
                         <li><a th:href="@{'/profile/' + ${#authentication.name}}">프로필</a></li>
                         <li><a th:href="@{'/settings/profile'}">설정</a></li>
