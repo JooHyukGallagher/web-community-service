@@ -216,7 +216,7 @@ class ReplyControllerTest {
         assertThat(replyReadForm.getNickname()).isEqualTo(account.getNickname());
     }
 
-    @DisplayName("댓글 수 API - 실패(내용 입력 x)")
+    @DisplayName("댓글 수정 API - 실패(내용 입력 x)")
     @WithAccount("joohyuk")
     @Test
     void modifyReply_fail() throws Exception {
