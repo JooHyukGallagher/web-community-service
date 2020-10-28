@@ -2,11 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/fragments.html :: head"></head>
 <body class="bg-light">
-<div th:replace="fragments/fragments.html :: main-nav"></div>
+<header th:replace="fragments/fragments.html :: main-header"></header>
 <div th:replace="fragments/fragments.html :: message"></div>
-<div class="container">
+<main id="main" class="container">
     <div class="row justify-content-center">
-        <div class="border border-secondary my-4 p-4" style="width: 100%;">
+        <div class="my-4 p-4" id="boardContentContainer" style="width: 100%;">
+            <!-- 게시글 헤더-->
             <div class="row">
                 <div class="col-sm-10">
                     <a class="nav-link" href="#" id="userDropdown" role="button" aria-haspopup="true"
@@ -17,54 +18,64 @@
                         <img th:if="${!#strings.isEmpty(boardReadForm.profileImage)}"
                              th:src="${boardReadForm.profileImage}"
                              width="24" height="24" class="rounded border">
-                        <span th:text="${boardReadForm.nickname}"></span>
+                        <span th:text="${boardReadForm.nickname}">joohyuk</span>
                     </a>
-                    <h3 class="my-4" th:text="${boardReadForm.title}" style="padding-left: 16px">제목</h3>
+                    <h3 class="my-4" th:text="${boardReadForm.title}" style="padding-left: 16px">안녕하세요 ~~</h3>
                 </div>
                 <div class="col-sm text-right">
                     <span th:text="'조회수 ' + ${boardReadForm.viewCount}">조회수1</span>
                     <br>
                 </div>
             </div>
-            <div class="form-group my-4">
-                <textarea class="form-control content" th:text="${boardReadForm.content}" rows="10"
-                          readonly>내용</textarea>
+
+            <!-- 게시글 본문-->
+            <div class="form-group my-2" id="boardContent">
+                <p class="content" th:text="${boardReadForm.content}" rows="10"
+                   readonly>안녕하세요 반갑습니다 제 이름은 김주혁 입니다.</p>
             </div>
 
-            <div class="pull-left" id="toBoardList">
-                <a th:if="${boardSearch.searchCondition}" th:href="@{'/boards?searchCondition=' +${boardSearch.searchCondition}
-                    + '&boardType=' + ${boardSearch.boardType} + '&keyword=' + ${boardSearch.keyword}
-                    + '&page=' + ${currentPage}}"
-                   class="btn btn-outline-dark">목록으로</a>
-                <a th:unless="${boardSearch.searchCondition}"
-                   th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
-                   class="btn btn-outline-dark">목록으로</a>
+            <!-- 게시글 목록, 수정, 삭제 버튼-->
+            <div class="d-flex justify-content-end" id="boardButton">
+                <div class="pull-left" id="toBoardList">
+                    <a th:if="${boardSearch.searchCondition}" th:href="@{'/boards?searchCondition=' +${boardSearch.searchCondition}
+                        + '&boardType=' + ${boardSearch.boardType} + '&keyword=' + ${boardSearch.keyword}
+                        + '&page=' + ${currentPage}}"
+                       class="btn btn-outline-dark">목록으로</a>
+                    <a th:unless="${boardSearch.searchCondition}"
+                       th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
+                       class="btn btn-outline-dark">목록으로</a>
+                </div>
+
+                <div id="boardModifyButton" class="mr-2"
+                     th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
+                    <a class="btn btn-outline-secondary"
+                       th:href="@{'/boards/' + ${id} + '/update?boardType=' + ${boardType} + '&page=' + ${currentPage}}">수정</a>
+                </div>
+                <div id="boardDeleteButton" class="pull-right"
+                     th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#checkDeleteBoard">삭제</button>
+                </div>
             </div>
 
-            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}"
-                 style="margin-left: 10px">
-                <a class="btn btn-secondary"
-                   th:href="@{'/boards/' + ${id} + '/update?boardType=' + ${boardType} + '&page=' + ${currentPage}}">수정</a>
-            </div>
-            <div class="pull-right" th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
-                <button class="btn btn-danger" data-toggle="modal" data-target="#checkDeleteBoard">삭제</button>
-            </div>
-
-            <div id="replyInput" style="margin-top: 100px">
+            <!-- 댓글 작성 뷰-->
+            <div id="replyInput">
                 <div class="">
                     <div class="mb-3">
                         <label for="newReplyWriter" id="createReplyLabel">댓글 남기기</label>
                         <textarea class="form-control" id="newReplyWriter" name="content" placeholder="댓글을 남겨주세요"
                                   required></textarea>
                     </div>
-                    <button class="btn btn-primary pull-right" type="submit" id="replyAddBtn">댓글 작성</button>
+                    <button class="btn get-started-btn" type="submit" id="replyAddBtn">댓글 작성</button>
                 </div>
             </div>
 
+            <!-- 댓글 목록 뷰-->
             <div class="timeline" style="margin-top: 100px">
                 <!--timeline time label-->
                 <span class="bg-green" id="replyListTitle">댓글 목록</span>
                 <div class="time-label flex" id="repliesDiv">
+                    <!-- Reply List-->
+                    <!-- Reply List End-->
                 </div>
             </div>
 
@@ -154,7 +165,7 @@
 
         </div>
     </div>
-</div>
+</main>
 <input type="hidden" id="boardId" th:value="${id}">
 <input type="hidden" id="nickname" th:value="${boardReadForm.nickname}">
 <input type="hidden" id="currentAccountNickname" th:value="${account.nickname}">
@@ -165,34 +176,32 @@
 <script id="template" type="text/x-handlebars-template">
     {{#each .}}
         <div class="col-md-12 comment" data-id="{{id}}">
-            <div class="panel panel-default">
-                <div class="panel-heading d-flex justify-content-between">
-                    <h4 class="panel-title">
-                        <a href="/profile/{{nickname}}">
-                            <span class="user-violet">{{nickname}}</span>
-                        </a>
-                        <span class="fromNow">{{createdDateTime}}</span>
-                    </h4>
-                    {{#if isWriter}}
-                        <h6 class="panel-title" id="modifyReply">
+            <div class="comment-header">
+                <div class="comment-header-left">
+                    <a href="/profile/{{nickname}}">
+                        <span>{{nickname}}</span>
+                    </a>
+                    <span class="fromNow">{{createdDateTime}}</span>
+                </div>
+                {{#if isWriter}}
+                    <div class="comment-header-right">
+                        <h6 class="panel-title d-flex" id="modifyReply">
                             <input type="button" id="modify" value="수정" onclick="reply.modifyReply({{id}})"
                                    data-toggle="modal" data-target="#modifyReplyModal">
                             <input type="button" id="delete" value="삭제" onclick="reply.deleteReply({{id}})"
                                    data-toggle="modal" data-target="#deleteReplyModal">
                         </h6>
-                    {{/if}}
-                </div>
-                <div class="panel-body">
-                    <div class="content" style="line-height: 30px;">{{content}}</div>
-                </div>
+                    </div>
+                {{/if}}
             </div>
-        </div>
-    {{/each}}
+            <div class="comment-main">
+                <div class="content">{{content}}</div>
+            </div>
+        </div>    {{/each}}
 </script>
-<script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
-<script src="/js/global.js"></script>
-<script src="/js/board/boardRead.js"></script>
-<script src="/js/reply/reply.js"></script>
+<script src="/assets/js/global.js"></script>
+<script src="/assets/js/board/boardRead.js"></script>
+<script src="/assets/js/reply/reply.js"></script>
 
 <div th:replace="fragments/fragments.html :: footer"></div>
 <div th:replace="fragments/fragments.html :: editor-script"></div>

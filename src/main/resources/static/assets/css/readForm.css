@@ -1,0 +1,51 @@
+#boardContent {
+    padding: 0px 16px;
+}
+
+#boardButton {
+    margin-top: 50px;
+    padding: 0px 16px;
+}
+
+#toBoardList {
+    flex: none;
+}
+
+#boardModifyButton {
+    margin-left: auto;
+}
+
+#replyAddBtn {
+    margin-left: 0px;
+}
+
+#replyInput {
+    margin-top: 80px;
+    padding: 0px 16px;
+}
+
+.timeline {
+    padding: 0px 16px;
+}
+
+.comment-header {
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-header-right #modify {
+    margin-right: 5px;
+}
+
+#repliesDiv > .comment {
+    padding: 0px;
+}
+
+#modify,
+#delete {
+    background: #3b4ef8;
+    color: white;
+    border-style: none;
+    border-radius: 5px;
+}

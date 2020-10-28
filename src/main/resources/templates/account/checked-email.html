@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/fragments.html::head"></head>
 <body class="bg-light">
-<div th:replace="fragments/fragments.html::main-nav"></div>
+<header th:replace="fragments/fragments.html::main-header"></header>
 
-<div class="container">
+<main id="main" class="container">
     <div class="py-5 text-center" th:if="${error}">
         <p class="lead">이메일 확인</p>
         <div class="alert alert-danger" role="alert">
@@ -21,7 +21,9 @@
         <small class="text-info">이제부터 가입할 때 사용한 이메일 또는 닉네임과 패스워드로 로그인
             할 수 있습니다.</small>
     </div>
-</div>
+
+</main> <!-- End #main -->
+
 <div th:replace="fragments/fragments.html::footer"></div>
 </body>
 </html>

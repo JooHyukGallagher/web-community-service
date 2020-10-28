@@ -1,0 +1,8 @@
+#profileModifyButton {
+    background: #3b4ef8;
+}
+
+.list-group-item.active {
+    background-color: #3b4ef8;
+    border-color: #3b4ef8;
+}

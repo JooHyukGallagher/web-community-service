@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/fragments.html :: head"></head>
 <body class="bg-light">
-<div th:replace="fragments/fragments.html :: main-nav"></div>
+<header th:replace="fragments/fragments.html :: main-header"></header>
 <div th:replace="fragments/fragments.html :: email-verified-alert"></div>
 <div th:replace="fragments/fragments.html :: message"></div>
-<div class="container">
+<main id="main" class="container">
     <div th:replace="fragments/boardFragments.html :: board-type(type = ${boardType})"></div>
     <div th:replace="fragments/boardFragments.html :: board-list(boards=${boards.content}, boardSearch=${boardSearch})"></div>
     <nav th:replace="fragments/boardFragments.html :: board-pagination(boardType=${boardType}, boardPages=${boards}, boardSearch=${boardSearch})"></nav>
@@ -20,11 +20,11 @@
             </div>
             <input type="hidden" name="boardType" th:value="${boardType}">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
-            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">검색</button>
+            <button class="btn get-started-btn my-2 my-sm-0" type="submit" id="boardSearchButton">검색</button>
         </form>
-        <a href="/new-board" class="btn btn-dark">글작성</a>
+        <a href="/new-board" class="get-started-btn scrollto">글작성</a>
     </div>
-</div>
+</main>
 <div th:replace="fragments/fragments.html::footer"></div>
 <script th:replace="fragments/fragments.html :: date-time"></script>
 </body>
