@@ -130,7 +130,7 @@ public class BoardController {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 boardService.createBoard(account, boardWriteForm);
-                return "redirect:/boards";
+                return "redirect:/boards?boardType=" + boardWriteForm.getBoardType();
             } else {
                 model.addAttribute("account", account);
                 model.addAttribute("boardWriteForm", boardWriteForm);

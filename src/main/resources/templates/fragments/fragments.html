@@ -211,6 +211,7 @@
 <div th:fragment="editor-script">
     <script type="application/javascript">
         $(function () {
+            $('#content').val(" ")
             $('#content').summernote({
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
                 placeholder: '내용을 적어주세요.',
