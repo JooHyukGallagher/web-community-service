@@ -40,15 +40,15 @@
                     <a th:if="${boardSearch.searchCondition}" th:href="@{'/boards?searchCondition=' +${boardSearch.searchCondition}
                         + '&boardType=' + ${boardSearch.boardType} + '&keyword=' + ${boardSearch.keyword}
                         + '&page=' + ${currentPage}}"
-                       class="btn btn-outline-dark">목록으로</a>
+                       class="btn get-started-btn">목록으로</a>
                     <a th:unless="${boardSearch.searchCondition}"
                        th:href="@{'/boards?boardType=' +${boardType} + '&page=' + ${currentPage}}"
-                       class="btn btn-outline-dark">목록으로</a>
+                       class="btn get-started-btn">목록으로</a>
                 </div>
 
                 <div id="boardModifyButton" class="mr-2"
                      th:if="${boardReadForm.isWriter(#authentication.getPrincipal())}">
-                    <a class="btn btn-outline-secondary"
+                    <a class="btn get-started-btn"
                        th:href="@{'/boards/' + ${id} + '/update?boardType=' + ${boardType} + '&page=' + ${currentPage}}">수정</a>
                 </div>
                 <div id="boardDeleteButton" class="pull-right"

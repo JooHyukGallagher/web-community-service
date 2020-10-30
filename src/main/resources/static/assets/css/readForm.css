@@ -11,6 +11,10 @@
     flex: none;
 }
 
+#toBoardList > a {
+    margin-left: 0;
+}
+
 #boardModifyButton {
     margin-left: auto;
 }
@@ -21,7 +25,9 @@
 
 #replyInput {
     margin-top: 80px;
-    padding: 0px 16px;
+    padding: 15px;
+    border: 1px solid #9da7fc;
+    border-radius: 15px;
 }
 
 .timeline {
@@ -29,7 +35,7 @@
 }
 
 .comment-header {
-    padding-top: 10px;
+    /*padding-top: 10px;*/
     display: flex;
     justify-content: space-between;
 }
@@ -39,7 +45,10 @@
 }
 
 #repliesDiv > .comment {
-    padding: 0px;
+    border: 1px solid #9da7fc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px 0;
 }
 
 #modify,
