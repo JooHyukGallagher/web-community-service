@@ -30,8 +30,7 @@
 
             <!-- 게시글 본문-->
             <div class="form-group my-2" id="boardContent">
-                <p class="content" th:text="${boardReadForm.content}" rows="10"
-                   readonly>안녕하세요 반갑습니다 제 이름은 김주혁 입니다.</p>
+                <div class="content" th:utext="${boardReadForm.content}"></div>
             </div>
 
             <!-- 게시글 목록, 수정, 삭제 버튼-->
