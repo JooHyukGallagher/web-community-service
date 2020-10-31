@@ -1,4 +1,4 @@
-package me.weekbelt.community.infra.image;
+package me.weekbelt.community.infra.fileUtils;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +11,8 @@ public class ImageFile {
         return uuid.toString() + "_" + originalName;
     }
 
-    public static void saveImageFile(MultipartFile image, String saveAddr) {
+
+    public static void saveImageFileToLocal(MultipartFile image, String saveAddr) {
         try(FileOutputStream fileOutputStream = new FileOutputStream(saveAddr);
                 BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
                 FileInputStream fileInputStream = (FileInputStream) image.getInputStream();

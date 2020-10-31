@@ -56,7 +56,6 @@
 
     <!-- Template Main JS File -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/global.js"></script>
 
     <!-- handlebars -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
@@ -216,9 +215,43 @@
                 lang: 'ko-KR',
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
                 placeholder: '내용을 적어주세요.',
-                height: 300
+                height: 300,
+                focus: true,
+                callbacks: {
+                    onImageUpload: function (files) {
+                        for (let i = 0; i < files.length; i++) {
+                            sendFile(files[i], this);
+                        }
+                    }
+                }
             });
         });
+
+        /**
+         * 이미지 파일 업로드
+         */
+        const sendFile = async (file, el) => {
+            const token = document.querySelector("#_csrf").content;
+            // let form_data = new FormData();
+            // form_data.append('file', file);
+            const formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: '/image',
+                contentType: false,
+                enctype: 'multipart/form_data',
+                processData: false,
+                headers: {'X-CSRF-TOKEN': token},
+                success: function (url) {
+                    $(el).summernote('insertImage', url, function ($image) {
+                        $image.css('width', "25%");
+                    });
+                }
+            })
+        }
     </script>
 </div>
 </html>
