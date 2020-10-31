@@ -2,14 +2,12 @@ package me.weekbelt.community.modules.fileInfo;
 
 import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.infra.fileUtils.ImageFile;
-import me.weekbelt.community.modules.board.Board;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional
@@ -42,10 +40,4 @@ public class FileInfoService {
 
         return fileInfoRepository.save(saveFileImage);
     }
-
-
-    public List<FileInfo> findImagesByBoardId(Long boardId) {
-        return fileInfoRepository.findAllByBoardId(boardId);
-    }
-
 }

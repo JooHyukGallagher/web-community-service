@@ -81,7 +81,7 @@ class BoardControllerTest {
         // then
         resultActions
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards"));
+                .andExpect(redirectedUrl("/boards?boardType=NOTICE"));
     }
 
     @DisplayName("권한 없는 계정의 공지글 생성 - 실패")
