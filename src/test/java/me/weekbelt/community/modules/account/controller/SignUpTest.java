@@ -2,16 +2,13 @@ package me.weekbelt.community.modules.account.controller;
 
 import me.weekbelt.community.infra.MockMvcTest;
 import me.weekbelt.community.modules.account.Account;
+import me.weekbelt.community.modules.account.controller.AccountControllerTest.SignUpFormAggregator;
 import me.weekbelt.community.modules.account.form.SignUpForm;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
-import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
-import org.junit.jupiter.params.aggregator.ArgumentsAggregationException;
-import org.junit.jupiter.params.aggregator.ArgumentsAggregator;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-public class AccountControllerSignUpTest {
+public class SignUpTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -104,17 +101,6 @@ public class AccountControllerSignUpTest {
         assertThat(account).isNotNull();
         assertThat(account.getEmailCheckToken()).isNotNull();
         assertThat(accountRepository.existsByEmail(signUpForm.getEmail())).isTrue();
-    }
-
-    static class SignUpFormAggregator implements ArgumentsAggregator {
-        @Override
-        public Object aggregateArguments(ArgumentsAccessor accessor, ParameterContext context) throws ArgumentsAggregationException {
-            return SignUpForm.builder()
-                    .nickname(accessor.getString(0))
-                    .email(accessor.getString(1))
-                    .password(accessor.getString(2))
-                    .build();
-        }
     }
 
 }
