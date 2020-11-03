@@ -1,11 +1,10 @@
 package me.weekbelt.community.modules.account.form;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class PasswordForm {
 

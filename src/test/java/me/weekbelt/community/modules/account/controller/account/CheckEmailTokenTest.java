@@ -1,4 +1,4 @@
-package me.weekbelt.community.modules.account.controller;
+package me.weekbelt.community.modules.account.controller.account;
 
 import me.weekbelt.community.infra.MockMvcTest;
 import me.weekbelt.community.modules.account.Account;

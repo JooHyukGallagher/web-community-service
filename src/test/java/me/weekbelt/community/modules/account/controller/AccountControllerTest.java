@@ -2,6 +2,8 @@ package me.weekbelt.community.modules.account.controller;
 
 import me.weekbelt.community.infra.MockMvcTest;
 import me.weekbelt.community.modules.account.AccountFactory;
+import me.weekbelt.community.modules.account.form.PasswordForm;
+import me.weekbelt.community.modules.account.form.Profile;
 import me.weekbelt.community.modules.account.form.SignUpForm;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.account.service.AccountService;
@@ -13,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
 @MockMvcTest
-class AccountControllerTest {
+public class AccountControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -27,13 +29,35 @@ class AccountControllerTest {
     @Autowired
     AccountFactory accountFactory;
 
-    static class SignUpFormAggregator implements ArgumentsAggregator {
+    public static class SignUpFormAggregator implements ArgumentsAggregator {
         @Override
         public Object aggregateArguments(ArgumentsAccessor accessor, ParameterContext context) throws ArgumentsAggregationException {
             return SignUpForm.builder()
                     .nickname(accessor.getString(0))
                     .email(accessor.getString(1))
                     .password(accessor.getString(2))
+                    .build();
+        }
+    }
+
+    public static class ProfileAggregator implements ArgumentsAggregator {
+        @Override
+        public Object aggregateArguments(ArgumentsAccessor accessor, ParameterContext context) throws ArgumentsAggregationException {
+            return Profile.builder()
+                    .bio(accessor.getString(0))
+                    .occupation(accessor.getString(1))
+                    .location(accessor.getString(2))
+                    .profileImage(accessor.getString(3))
+                    .build();
+        }
+    }
+
+    public static class PasswordFormAggregator implements ArgumentsAggregator {
+        @Override
+        public Object aggregateArguments(ArgumentsAccessor accessor, ParameterContext context) throws ArgumentsAggregationException {
+            return PasswordForm.builder()
+                    .newPassword(accessor.getString(0))
+                    .newPasswordConfirm(accessor.getString(1))
                     .build();
         }
     }
