@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -30,51 +31,6 @@ class AccountControllerTest {
 
     @Autowired
     AccountService accountService;
-
-    @DisplayName("회원 가입 화면 폼")
-    @Test
-    public void signUpForm() throws Exception {
-        mockMvc.perform(get("/sign-up"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("signUpForm"))
-                .andExpect(view().name("account/sign-up"))
-                .andExpect(unauthenticated());
-    }
-
-    @DisplayName("회원 가입 처리 - 입력값 오류")
-    @Test
-    public void signUpSubmit_with_wrong_input() throws Exception {
-        mockMvc.perform(post("/sign-up")
-                .param("nickname", "joohyuk")
-                .param("email", "email...")
-                .param("password", "12345")
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(model().hasErrors())
-                .andExpect(view().name("account/sign-up"))
-                .andExpect(unauthenticated());
-    }
-
-    @DisplayName("회원 가입 처리 - 입력값 정상")
-    @Test
-    public void signUpSubmit_with_correct_input() throws Exception {
-        mockMvc.perform(post("/sign-up")
-                .param("nickname", "joohyuk")
-                .param("email", "vfrvfr4207@hanmail.net")
-                .param("password", "12345678")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated().withUsername("joohyuk"));
-
-        Account account = accountRepository.findByEmail("vfrvfr4207@hanmail.net").orElse(null);
-        assertThat(account).isNotNull();
-        assertThat(account.getPassword()).isNotEqualTo("12345678");
-        assertThat(account.getEmailCheckToken()).isNotNull();
-
-        assertThat(accountRepository.existsByEmail("vfrvfr4207@hanmail.net")).isTrue();
-    }
 
     @DisplayName("인증 메일 확인 - 입력값 오류")
     @Test
