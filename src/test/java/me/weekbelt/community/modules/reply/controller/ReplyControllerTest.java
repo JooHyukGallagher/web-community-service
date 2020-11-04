@@ -54,7 +54,7 @@ class ReplyControllerTest {
         // given
         Account account = accountRepository.findByNickname("joohyuk").get();
         account.completeSignUp(); // 이메일 검증
-        Board board = boardFactory.createBoard(account);
+        Board board = boardFactory.createRandomBoard(account);
         ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
                 .content("test reply")
                 .createdDateTime(LocalDateTime.now())
@@ -90,7 +90,7 @@ class ReplyControllerTest {
         // given
         Account account = accountRepository.findByNickname("joohyuk").get();
         account.completeSignUp();       // 이메일 검증
-        Board board = boardFactory.createBoard(account);
+        Board board = boardFactory.createRandomBoard(account);
         ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
                 .content("")
                 .createdDateTime(LocalDateTime.now())
@@ -148,7 +148,7 @@ class ReplyControllerTest {
     void replyList() throws Exception {
         // given
         Account account = accountRepository.findByNickname("joohyuk").get();
-        Board board = boardFactory.createBoard(account);
+        Board board = boardFactory.createRandomBoard(account);
 
         for (int i = 1; i <= 36; i++) {
             ReplyCreateForm replyCreateForm = ReplyCreateForm.builder()
@@ -181,7 +181,7 @@ class ReplyControllerTest {
     void modifyReply_success() throws Exception {
         // given
         Account account = accountRepository.findByNickname("joohyuk").get();
-        Board board = boardFactory.createBoard(account);
+        Board board = boardFactory.createRandomBoard(account);
         ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
                 .content("test reply")
                 .createdDateTime(LocalDateTime.now())
@@ -222,7 +222,7 @@ class ReplyControllerTest {
     void modifyReply_fail() throws Exception {
         // given
         Account account = accountRepository.findByNickname("joohyuk").get();
-        Board board = boardFactory.createBoard(account);
+        Board board = boardFactory.createRandomBoard(account);
         ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
                 .content("test reply")
                 .createdDateTime(LocalDateTime.now())
@@ -261,7 +261,7 @@ class ReplyControllerTest {
     void removeReply() throws Exception {
         // given
         Account account = accountRepository.findByNickname("joohyuk").get();
-        Board board = boardFactory.createBoard(account);
+        Board board = boardFactory.createRandomBoard(account);
         ReplyCreateForm replyCreateform = ReplyCreateForm.builder()
                 .content("test reply")
                 .createdDateTime(LocalDateTime.now())

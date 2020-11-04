@@ -139,163 +139,7 @@ class BoardControllerTest {
                 .andExpect(view().name("board/creationForm"));
     }
 
-    @DisplayName("게시글 조회")
-    @WithAccount("joohyuk")
-    @Test
-    public void readBoard() throws Exception {
-        // given
-        Account twins = accountFactory.createAccount("twins");
-        Board board = boardFactory.createBoard(twins);
 
-        // when
-        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId() +
-                "?boardType=" + board.getBoardType() + "&page=1"));
-
-        // then
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("boardReadForm"))
-                .andExpect(model().attributeExists("boardType"))
-                .andExpect(model().attributeExists("currentPage"))
-                .andExpect(view().name("board/readForm"));
-    }
-
-    @DisplayName("게시글 수정 폼 조회")
-    @WithAccount("joohyuk")
-    @Test
-    public void updateBoardForm() throws Exception {
-        // given
-        Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
-        Board board = boardFactory.createBoard(joohyuk);
-
-        // when
-        ResultActions resultActions = mockMvc.perform(get("/boards/" + board.getId() + "/update?boardType=" + board.getBoardType() + "&page=1"));
-
-        // then
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("boardUpdateForm"))
-                .andExpect(model().attributeExists("id"))
-                .andExpect(model().attributeExists("boardType"))
-                .andExpect(model().attributeExists("currentPage"))
-                .andExpect(view().name("board/updateForm"));
-    }
-
-    @DisplayName("ADMIN 계정의 게시글을 공지글로 수정 - 성공")
-    @WithAccount("weekbelt")
-    @Test
-    public void updateNoticeBoard_success() throws Exception {
-        // given
-        Account weekbelt = accountRepository.findByNickname("weekbelt").orElse(null);
-        Board board = boardFactory.createBoard(weekbelt);
-
-        // when
-        ResultActions resultActions = mockMvc.perform(post("/boards/" + board.getId() + "/update")
-                .param("title", "수정 공지 게시글")
-                .param("content", "공지로 수정한 게시글 입니다.")
-                .param("boardType", "NOTICE")
-                .param("page", "1")
-                .with(csrf()));
-
-        // then
-        resultActions
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1"));
-
-        Board updatedBoard = boardRepository.findById(board.getId()).orElse(null);
-        assert updatedBoard != null;
-        assertThat(updatedBoard.getTitle()).isEqualTo("수정 공지 게시글");
-        assertThat(updatedBoard.getContent()).isEqualTo("공지로 수정한 게시글 입니다.");
-        assertThat(updatedBoard.getBoardType()).isEqualTo(BoardType.NOTICE);
-    }
-
-    @DisplayName("ADMIN 계정의 게시글을 공지글로 수정 - 실패")
-    @WithAccount("joohyuk")
-    @Test
-    public void updateNoticeBoard_fail() throws Exception {
-        // given
-        Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
-        Board board = boardFactory.createBoard(joohyuk);
-
-        // when
-        ResultActions resultActions = mockMvc.perform(post("/boards/" + board.getId() + "/update?page=1")
-                .param("title", "수정 공지 게시글")
-                .param("content", "공지로 수정한 게시글 입니다.")
-                .param("boardType", "NOTICE")
-                .with(csrf()));
-
-        // then
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("boardUpdateForm"))
-                .andExpect(model().attributeExists("message"))
-                .andExpect(model().attributeExists("boardType"))
-                .andExpect(model().attributeExists("currentPage"))
-                .andExpect(view().name("board/updateForm"));
-
-        Board noneUpdatedBoard = boardRepository.findById(board.getId()).orElse(null);
-        assert noneUpdatedBoard != null;
-        assertThat(noneUpdatedBoard.getTitle()).isEqualTo("test board");
-        assertThat(noneUpdatedBoard.getContent()).isEqualTo("board content");
-        assertThat(noneUpdatedBoard.getBoardType()).isEqualTo(BoardType.FREE);
-    }
-
-
-    @DisplayName("게시글 수정 - 성공")
-    @WithAccount("joohyuk")
-    @Test
-    public void updateBoard_success() throws Exception {
-        // given
-        Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
-        Board board = boardFactory.createBoard(joohyuk);
-
-        // when
-        ResultActions resultActions = mockMvc.perform(post("/boards/" + board.getId() + "/update")
-                .param("title", "수정한 제목")
-                .param("content", "수정한 내용 입니다.")
-                .param("boardType", "PROMOTION")
-                .param("page", "1")
-                .with(csrf()));
-
-        // then
-        resultActions
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1"));
-
-        Board updatedBoard = boardRepository.findById(board.getId()).orElse(null);
-        assert updatedBoard != null;
-        assertThat(updatedBoard.getTitle()).isEqualTo("수정한 제목");
-        assertThat(updatedBoard.getContent()).isEqualTo("수정한 내용 입니다.");
-        assertThat(updatedBoard.getBoardType()).isEqualTo(BoardType.PROMOTION);
-    }
-
-    @DisplayName("게시글 수정 - 실패(제목 공백)")
-    @WithAccount("joohyuk")
-    @Test
-    public void updateBoard_fail() throws Exception {
-        // given
-        Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
-        Board board = boardFactory.createBoard(joohyuk);
-
-        // when
-        ResultActions resultActions = mockMvc.perform(post("/boards/" + board.getId() + "/update")
-                .param("title", "")
-                .param("content", "수정한 내용 입니다.")
-                .param("boardType", "PROMOTION")
-                .param("page", "1")
-                .with(csrf()));
-
-        // then
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("boardType"))
-                .andExpect(model().attributeExists("currentPage"))
-                .andExpect(view().name("board/updateForm"));
-    }
 
     @DisplayName("게시글 삭제 - 성공")
     @WithAccount("joohyuk")
@@ -303,7 +147,7 @@ class BoardControllerTest {
     public void deleteBoard_success() throws Exception {
         // given
         Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
-        Board board = boardFactory.createBoard(joohyuk);
+        Board board = boardFactory.createRandomBoard(joohyuk);
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId() + "?boardType=" + board.getBoardType() + "&page=1")
@@ -323,7 +167,7 @@ class BoardControllerTest {
     public void deleteBoard_fail() throws Exception {
         // given
         Account joohyuk = accountRepository.findByNickname("joohyuk").orElse(null);
-        Board board = boardFactory.createBoard(joohyuk);
+        Board board = boardFactory.createRandomBoard(joohyuk);
 
         // when
         ResultActions resultActions = mockMvc.perform(delete("/boards/" + board.getId())

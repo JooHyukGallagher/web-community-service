@@ -13,7 +13,7 @@ public class BoardFactory {
 
     private final BoardRepository boardRepository;
 
-    public Board createBoard(Account account) {
+    public Board createRandomBoard(Account account) {
         Board board = Board.builder()
                 .boardType(BoardType.FREE)
                 .account(account)
@@ -23,5 +23,18 @@ public class BoardFactory {
                 .modifiedDateTime(LocalDateTime.now())
                 .build();
         return boardRepository.save(board);
+    }
+
+    public void createBoard(Account account, String title, String content, BoardType boardType) {
+        Board board = Board.builder()
+                .boardType(BoardType.FREE)
+                .account(account)
+                .title(title)
+                .content(content)
+                .boardType(boardType)
+                .createdDateTime(LocalDateTime.now())
+                .modifiedDateTime(LocalDateTime.now())
+                .build();
+        boardRepository.save(board);
     }
 }

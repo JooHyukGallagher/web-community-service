@@ -37,7 +37,9 @@ public class BoardController {
                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                          BoardSearch boardSearch) {
 
-        model.addAttribute("account", account);
+        if (account != null) {
+            model.addAttribute("account", account);
+        }
         model.addAttribute("boards", boardService.findBoardList(boardSearch, pageable));
         model.addAttribute("boardType", boardSearch.getBoardType());
         model.addAttribute("currentPage", pageable.getPageNumber());
