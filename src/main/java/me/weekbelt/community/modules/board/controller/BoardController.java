@@ -63,9 +63,14 @@ public class BoardController {
     @GetMapping("/boards/{id}/update")
     public String updateBoardForm(@CurrentAccount Account account, @PathVariable Long id,
                                   Model model,
-                                  @RequestParam String boardType, @RequestParam Integer page) {
+                                  @RequestParam String boardType, @RequestParam Integer page) throws Exception{
         Board board = boardRepository.findBoardWithAccountById(id)
                 .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다."));
+
+        if (account == null | !board.getAccount().getNickname().equals(account.getNickname())) {
+            throw new Exception("수정 권한이 없습니다.");
+        }
+
         BoardUpdateForm boardUpdateForm = BoardDtoFactory.boardToBoardUpdateForm(board);
 
         model.addAttribute("account", account);
