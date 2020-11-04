@@ -1,4 +1,4 @@
-package me.weekbelt.community;
+package me.weekbelt.community.modules;
 
 import lombok.extern.slf4j.Slf4j;
 import me.weekbelt.community.modules.account.Account;
