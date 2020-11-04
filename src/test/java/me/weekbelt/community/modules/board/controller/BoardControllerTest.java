@@ -28,11 +28,7 @@ class BoardControllerTest {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private AccountFactory accountFactory;
-    @Autowired
     private BoardFactory boardFactory;
-    @Autowired
-    private BoardRepository boardRepository;
 
     @DisplayName("게시글 생성 폼 - 성공")
     @WithAccount("joohyuk")
