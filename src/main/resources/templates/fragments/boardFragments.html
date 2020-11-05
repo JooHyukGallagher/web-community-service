@@ -46,14 +46,14 @@
                 <a th:if="${boardSearch.searchCondition}" th:href="@{'/boards/' + ${board.id}
                     + '?searchCondition=' + ${boardSearch.searchCondition}
                     + '&boardType=' + ${boardSearch.boardType} + '&keyword=' + ${boardSearch.keyword}
-                    + '&page=' + ${currentPage}}"
-                   th:text="${board.title}">
-                    제목
+                    + '&page=' + ${currentPage}}">
+                    <span th:text="${board.title}">제목</span>
+                    <span class="badge badge-light" th:text="${board.commentCount}">12</span>
                 </a>
                 <a th:unless="${boardSearch.searchCondition}"
-                   th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}"
-                   th:text="${board.title}">
-                    제목
+                   th:href="@{'/boards/' + ${board.id} + '?boardType=' + ${boardType} + '&page=' + ${currentPage}}">
+                    <span th:text="${board.title}">제목</span>
+                    <span class="badge badge-light" th:text="${board.commentCount}">12</span>
                 </a>
             </td>
             <td th:text="${board.nickname}">글쓴이</td>

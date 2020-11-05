@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import me.weekbelt.community.modules.account.QAccount;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardType;
 import me.weekbelt.community.modules.board.form.BoardSearch;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+import static me.weekbelt.community.modules.account.QAccount.account;
 import static me.weekbelt.community.modules.board.QBoard.board;
 
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
         QueryResults<Board> boardQueryResults = jpaQueryFactory
                 .selectFrom(board)
+                .join(board.account, account).fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .where(builder)

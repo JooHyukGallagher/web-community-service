@@ -1,7 +1,12 @@
+.badge {
+    background: #e2e5fe;
+}
+
 #boardSearchButton {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 #searchContainer {
     margin-top: 50px;
 }
+

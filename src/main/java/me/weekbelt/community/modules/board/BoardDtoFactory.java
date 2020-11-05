@@ -25,6 +25,7 @@ public class BoardDtoFactory {
                 .id(board.getId())
                 .title(board.getTitle())
                 .nickname(board.getAccount().getNickname())
+                .commentCount(board.getReplyList().size())
                 .createdDateTime(board.getCreatedDateTime())
                 .viewCount(board.getViewCount())
                 .build();

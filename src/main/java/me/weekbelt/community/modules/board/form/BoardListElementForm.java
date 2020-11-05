@@ -17,6 +17,8 @@ public class BoardListElementForm {
 
     private String nickname;
 
+    private Integer commentCount;
+
     private LocalDateTime createdDateTime;
 
     private Integer viewCount;

@@ -31,6 +31,11 @@ public class Reply {
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
 
+    public void addBoard(Board board) {
+        this.board = board;
+        board.getReplyList().add(this);
+    }
+
     public void update(ReplyUpdateForm replyUpdateForm) {
         this.content = replyUpdateForm.getContent();
         this.modifiedDateTime = LocalDateTime.now();

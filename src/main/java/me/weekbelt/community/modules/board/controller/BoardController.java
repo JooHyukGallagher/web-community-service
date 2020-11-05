@@ -9,6 +9,7 @@ import me.weekbelt.community.modules.board.BoardType;
 import me.weekbelt.community.modules.board.form.*;
 import me.weekbelt.community.modules.board.repository.BoardRepository;
 import me.weekbelt.community.modules.board.service.BoardService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -40,7 +41,9 @@ public class BoardController {
         if (account != null) {
             model.addAttribute("account", account);
         }
-        model.addAttribute("boards", boardService.findBoardList(boardSearch, pageable));
+
+        Page<BoardListElementForm> boardList = boardService.findBoardList(boardSearch, pageable);
+        model.addAttribute("boards", boardList);
         model.addAttribute("boardType", boardSearch.getBoardType());
         model.addAttribute("currentPage", pageable.getPageNumber());
         model.addAttribute("boardSearch", boardSearch);

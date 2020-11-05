@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.board.form.BoardUpdateForm;
+import me.weekbelt.community.modules.reply.Reply;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @NoArgsConstructor @EqualsAndHashCode(of = "id")
 @Entity
@@ -23,9 +26,12 @@ public class Board {
     @Lob
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @OneToMany(mappedBy = "board")
+    private List<Reply> replyList = new ArrayList<>();
 
     private Integer viewCount = 0;
 
