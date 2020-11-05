@@ -5,11 +5,26 @@ const reply = {
         this.requestReplyList(0, 10).then(r => {
             this.printReplyList(r)
             this.printPaging(r, 10);
+            this.showCommentCount(r);
         });
 
         this.regPageClickEvent();
         this.regCreateReplyEvent();
         this.regNewReplyWriterValidate();
+    },
+    showCommentCount: function (boardList) {
+        const commentCount = boardList.totalElements;
+
+        const boardListView = document.querySelector(".timeline");
+        const commentCountTag = document.createElement("h5");
+
+        if (commentCount > 1) {
+            commentCountTag.innerHTML = commentCount + " comments";
+        } else {
+            commentCountTag.innerHTML = commentCount + " comment";
+        }
+
+        boardListView.insertAdjacentElement('afterbegin', commentCountTag);
     },
     requestReplyList: async function (page, size) {
         if (size > 10000) {
