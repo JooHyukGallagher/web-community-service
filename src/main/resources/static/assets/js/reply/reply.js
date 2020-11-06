@@ -32,7 +32,7 @@ const reply = {
         }
         const boardId = document.querySelector("#boardId").value;
         const requestUrl = "/boards/" + boardId + "/replies?page=" + page + "&size=" + size + "&sort=id,desc";
-        return await ajax("GET", requestUrl);
+        return await fetch("GET", requestUrl);
     },
     printReplyList: function (replyList) {
         const replyElements = replyList.content;
@@ -121,7 +121,7 @@ const reply = {
             } else {
                 const boardId = document.querySelector("#boardId").value;
                 const requestUrl = "/boards/" + boardId + "/replies";
-                const resultData = await ajax("POST", requestUrl, createReplyForm);
+                const resultData = await fetch("POST", requestUrl, createReplyForm);
                 alert("등록 되었습니다.");
 
                 replyObj.value = "";
@@ -154,7 +154,7 @@ const reply = {
                     content: document.querySelector("#modifyReplyWriter").value
                 }
 
-                const replyReadForm = await ajax("PUT", requestUrl, data);
+                const replyReadForm = await fetch("PUT", requestUrl, data);
                 alert("수정 되었습니다.");
 
                 const href = document.querySelector("#boardRequestUrl").value;
@@ -175,7 +175,7 @@ const reply = {
             const boardId = document.querySelector("#boardId").value;
             const requestUrl = "/boards/" + boardId + "/replies/" + replyId;
 
-            const replyReadForm = await ajax("DELETE", requestUrl);
+            const replyReadForm = await fetch("DELETE", requestUrl);
             alert("삭제 되었습니다.");
 
             const href = document.querySelector("#boardRequestUrl").value;

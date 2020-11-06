@@ -1,4 +1,4 @@
-const ajax = async (method, url, data, property) => {
+const fetch = async (method, url, data, property) => {
     const token = document.querySelector("#_csrf").content;
     const init = {
         method: method,
