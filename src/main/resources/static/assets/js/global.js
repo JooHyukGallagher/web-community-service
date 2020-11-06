@@ -1,4 +1,4 @@
-const fetch = async (method, url, data, property) => {
+const fetchRequest = async (method, url, data, property) => {
     const token = document.querySelector("#_csrf").content;
     const init = {
         method: method,

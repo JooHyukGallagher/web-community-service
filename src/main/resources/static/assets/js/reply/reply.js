@@ -13,18 +13,17 @@ const reply = {
         this.regNewReplyWriterValidate();
     },
     showCommentCount: function (boardList) {
-        const commentCount = boardList.totalElements;
-
-        const boardListView = document.querySelector(".timeline");
-        const commentCountTag = document.createElement("h5");
+        let commentCount = boardList.totalElements;
+        const boardListView = document.querySelector("#commentCount");
 
         if (commentCount > 1) {
-            commentCountTag.innerHTML = commentCount + " comments";
+            commentCount = commentCount + " comments";
         } else {
-            commentCountTag.innerHTML = commentCount + " comment";
+            commentCount = commentCount + " comment";
         }
 
-        boardListView.insertAdjacentElement('afterbegin', commentCountTag);
+        boardListView.innerHTML = commentCount;
+
     },
     requestReplyList: async function (page, size) {
         if (size > 10000) {
@@ -32,7 +31,7 @@ const reply = {
         }
         const boardId = document.querySelector("#boardId").value;
         const requestUrl = "/boards/" + boardId + "/replies?page=" + page + "&size=" + size + "&sort=id,desc";
-        return await fetch("GET", requestUrl);
+        return await fetchRequest("GET", requestUrl);
     },
     printReplyList: function (replyList) {
         const replyElements = replyList.content;
@@ -121,7 +120,7 @@ const reply = {
             } else {
                 const boardId = document.querySelector("#boardId").value;
                 const requestUrl = "/boards/" + boardId + "/replies";
-                const resultData = await fetch("POST", requestUrl, createReplyForm);
+                const resultData = await fetchRequest("POST", requestUrl, createReplyForm);
                 alert("등록 되었습니다.");
 
                 replyObj.value = "";
@@ -129,6 +128,7 @@ const reply = {
                 this.requestReplyList(0, 10).then(r => {
                     this.printReplyList(r);
                     this.printPaging(r, 10);
+                    this.showCommentCount(r);
                 })
             }
         })
@@ -154,7 +154,7 @@ const reply = {
                     content: document.querySelector("#modifyReplyWriter").value
                 }
 
-                const replyReadForm = await fetch("PUT", requestUrl, data);
+                const replyReadForm = await fetchRequest("PUT", requestUrl, data);
                 alert("수정 되었습니다.");
 
                 const href = document.querySelector("#boardRequestUrl").value;
@@ -175,7 +175,7 @@ const reply = {
             const boardId = document.querySelector("#boardId").value;
             const requestUrl = "/boards/" + boardId + "/replies/" + replyId;
 
-            const replyReadForm = await fetch("DELETE", requestUrl);
+            const replyReadForm = await fetchRequest("DELETE", requestUrl);
             alert("삭제 되었습니다.");
 
             const href = document.querySelector("#boardRequestUrl").value;
