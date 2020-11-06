@@ -14,7 +14,7 @@
 
             <div class="row justify-content-center">
                 <div class="col-lg-6 mt-4 mt-md-0">
-                    <form th:action="@{/sign-up}" th:object="${signUpForm}" method="post" role="form" class="php-email-form">
+                    <form th:action="@{/sign-up}" th:object="${signUpForm}" method="post" role="form" class="needs-validation php-email-form">
                         <div class="form-group">
                             <label for="name">닉네임</label>
                             <input type="text" th:field="*{nickname}" class="form-control" id="name" placeholder="Your Name"/>
@@ -63,6 +63,6 @@
 </main><!-- End #main -->
 <div th:replace="fragments/fragments.html::footer"></div>
 <div th:replace="fragments/fragments.html::vendorJsFiles"></div>
-<div th:replace="fragments/fragments.html :: form-validation"></div>
+<div th:replace="fragments/fragments.html::form-validation"></div>
 </body>
 </html>
