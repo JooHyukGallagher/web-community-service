@@ -1,5 +1,7 @@
 package me.weekbelt.community.modules.reply;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
@@ -8,6 +10,8 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
+// 인스턴스화 방지
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReplyDtoFactory {
     public static Reply replyCreateFormToReply(Account account, Board board, ReplyCreateForm replyCreateForm) {
         return Reply.builder()

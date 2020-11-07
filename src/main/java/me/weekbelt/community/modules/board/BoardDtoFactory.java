@@ -1,5 +1,7 @@
 package me.weekbelt.community.modules.board;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.board.form.BoardListElementForm;
 import me.weekbelt.community.modules.board.form.BoardUpdateForm;
@@ -8,6 +10,8 @@ import me.weekbelt.community.modules.board.form.BoardReadForm;
 
 import java.time.LocalDateTime;
 
+// 인스턴스화 방지
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardDtoFactory {
     public static Board boardWriteFormToBoard(Account account, BoardWriteForm boardWriteForm){
         return Board.builder()
