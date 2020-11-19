@@ -90,10 +90,8 @@ public class AccountController {
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model,
                               @CurrentAccount Account account) {
-        Account findAccount = accountRepository.findByNickname(nickname).orElse(null);
-        if (findAccount == null) {
-            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
-        }
+        Account findAccount = accountRepository.findByNickname(nickname).orElseThrow(
+                () -> new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다."));
 
         model.addAttribute("account", findAccount);
         model.addAttribute("isOwner", findAccount.equals(account));
@@ -101,14 +99,14 @@ public class AccountController {
     }
 
     @GetMapping("/email-login")
-    public String emailLoginForm(){
+    public String emailLoginForm() {
         return "account/email-login";
     }
 
     @PostMapping("/email-login")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes attributes) {
         Account account = accountRepository.findByEmail(email).orElse(null);
-        if(account == null) {
+        if (account == null) {
             model.addAttribute("error", "유효한 이메일 주소가 아닙니다.");
             return "account/email-login";
         }
@@ -127,7 +125,7 @@ public class AccountController {
     public String loginByEmail(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email).orElse(null);
         String view = "account/logged-in-by-email";
-        if(account == null || !account.isValidToken(token)) {
+        if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인할 수 없습니다.");
             return view;
         }
