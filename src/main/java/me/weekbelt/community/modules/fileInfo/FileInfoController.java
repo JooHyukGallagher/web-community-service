@@ -1,6 +1,5 @@
 package me.weekbelt.community.modules.fileInfo;
 
-import com.sun.mail.iap.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;

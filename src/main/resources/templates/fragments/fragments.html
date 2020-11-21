@@ -191,8 +191,6 @@
          */
         const sendFile = async (file, el) => {
             const token = document.querySelector("#_csrf").content;
-            // let form_data = new FormData();
-            // form_data.append('file', file);
             const formData = new FormData();
             formData.append("file", file);
 

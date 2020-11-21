@@ -70,7 +70,8 @@ public class BoardController {
         Board board = boardRepository.findBoardWithAccountById(id)
                 .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다."));
 
-        if (account == null | !board.getAccount().getNickname().equals(account.getNickname())) {
+        assert account != null;
+        if (!board.getAccount().getNickname().equals(account.getNickname())) {
             throw new Exception("수정 권한이 없습니다.");
         }
 

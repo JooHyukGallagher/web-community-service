@@ -3,7 +3,6 @@ package me.weekbelt.community.modules.reply.controller;
 import lombok.RequiredArgsConstructor;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.CurrentAccount;
-import me.weekbelt.community.modules.reply.ReplyWriteValidator;
 import me.weekbelt.community.modules.reply.form.ReplyCreateForm;
 import me.weekbelt.community.modules.reply.form.ReplyReadForm;
 import me.weekbelt.community.modules.reply.form.ReplyUpdateForm;
@@ -25,9 +24,7 @@ import javax.validation.Valid;
 public class ReplyController {
 
     private final ReplyService replyService;
-    private final ReplyWriteValidator replyWriteValidator;
 
-    // TODO: 댓글 도배기능
     @PostMapping
     public ResponseEntity<?> createReply(@CurrentAccount Account account,
                                          @RequestBody @Valid ReplyCreateForm replyCreateForm,
@@ -36,12 +33,6 @@ public class ReplyController {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
         }
-
-//        TODO: 이메일 체크시 badrequest 처리
-//        replyWriteValidator.validate(account, errors);
-//        if (errors.hasErrors()) {
-//            return ResponseEntity.badRequest().body(errors);
-//        }
 
         ReplyReadForm replyReadForm = replyService.createReply(replyCreateForm, account.getNickname(), boardId);
         return ResponseEntity.ok(replyReadForm);
