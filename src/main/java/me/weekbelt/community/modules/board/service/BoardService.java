@@ -36,11 +36,12 @@ public class BoardService {
         return BoardDtoFactory.boardToBoardReadForm(board);
     }
 
-    public void createBoard(Account account, BoardWriteForm boardWriteForm) {
+    public Long createBoard(Account account, BoardWriteForm boardWriteForm) {
         Account findAccount = accountRepository.findById(account.getId()).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 계정입니다. 요청한 계정 ID=" + account.getId()));
         Board board = BoardDtoFactory.boardWriteFormToBoard(findAccount, boardWriteForm);
         boardRepository.save(board);
+        return board.getId();
     }
 
     public void updateBoard(Long boardId, BoardUpdateForm boardUpdateForm) {
