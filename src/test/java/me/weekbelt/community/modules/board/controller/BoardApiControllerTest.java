@@ -8,6 +8,8 @@ import me.weekbelt.community.modules.account.WithAccount;
 import me.weekbelt.community.modules.account.repository.AccountRepository;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardFactory;
+import me.weekbelt.community.modules.board.BoardType;
+import me.weekbelt.community.modules.board.form.BoardWriteForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,6 +79,31 @@ class BoardApiControllerTest {
                 .andExpect(jsonPath("boardReadForm").exists())
                 .andExpect(jsonPath("boardSearch").exists())
                 .andExpect(jsonPath("currentPage").exists())
-                ;
+        ;
+    }
+
+    @Test
+    @WithAccount("joohyuk")
+    @DisplayName("Board 생성 - 성공")
+    void createBoard() throws Exception {
+        // given
+        BoardWriteForm boardWriteForm = BoardWriteForm.builder()
+                .title("test title")
+                .boardType(BoardType.FREE)
+                .content("test content")
+                .build();
+        String requestUri = "/api/v1/boards";
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(requestUri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(boardWriteForm)));
+
+        // then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
     }
 }
