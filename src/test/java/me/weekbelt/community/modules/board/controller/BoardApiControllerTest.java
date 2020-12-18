@@ -103,7 +103,7 @@ class BoardApiControllerTest {
         // then
         resultActions
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
         ;
     }
 }
