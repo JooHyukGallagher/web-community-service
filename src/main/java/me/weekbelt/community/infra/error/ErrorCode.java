@@ -15,7 +15,6 @@ public enum ErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "404", "Missing Resource", "ERROR"),
     CONFLICT(HttpStatus.CONFLICT, "409", "Conflict Request", "ERROR");
 
-
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
