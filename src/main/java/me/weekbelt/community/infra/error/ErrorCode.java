@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     // Common
-    SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "Unspecified error", "ERROR")
+    SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "Unspecified error", "ERROR"),
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "400", "Invalid Parameter", "ERROR");
 
     private final HttpStatus httpStatus;
     private final String code;
