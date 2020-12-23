@@ -15,7 +15,7 @@ import java.io.IOException;
 public class GlobalExceptionHandler {
 
     public static ResponseEntity<ErrorResponse> getErrorResponseEntity(ErrorCode errorCode) {
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode, null, null);
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(errorResponse, errorCode.getHttpStatus());
     }
 

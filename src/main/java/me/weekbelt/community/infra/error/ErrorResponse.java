@@ -21,16 +21,16 @@ public class ErrorResponse {
         return errorResponse;
     }
 
-    public static ErrorResponse of(ErrorCode errorCode, String description) {
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
-        errorResponse.setDescription(description);
-        return errorResponse;
-    }
-
-    public static ErrorResponse of(ErrorCode errorCode, String description, String href) {
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode, description);
-        errorResponse.setHref(href);
-        return errorResponse;
-    }
+//    public static ErrorResponse of(ErrorCode errorCode, String description) {
+//        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+//        errorResponse.setDescription(description);
+//        return errorResponse;
+//    }
+//
+//    public static ErrorResponse of(ErrorCode errorCode, String description, String href) {
+//        ErrorResponse errorResponse = ErrorResponse.of(errorCode, description);
+//        errorResponse.setHref(href);
+//        return errorResponse;
+//    }
 
 }
