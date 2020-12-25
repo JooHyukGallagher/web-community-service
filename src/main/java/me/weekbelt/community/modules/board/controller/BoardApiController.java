@@ -1,6 +1,8 @@
 package me.weekbelt.community.modules.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.weekbelt.community.infra.error.ErrorCode;
+import me.weekbelt.community.infra.error.GlobalExceptionHandler;
 import me.weekbelt.community.modules.account.Account;
 import me.weekbelt.community.modules.account.CurrentAccount;
 import me.weekbelt.community.modules.board.BoardType;
@@ -61,7 +63,8 @@ public class BoardApiController {
                                          Errors errors) {
         // TODO: Error 메시지 Serialize
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+
+            return GlobalExceptionHandler.getErrorResponseEntity(ErrorCode.INVALID_INPUT_VALUE);
         }
 
         if (boardWriteForm.getBoardType() == BoardType.NOTICE) {
@@ -82,4 +85,5 @@ public class BoardApiController {
             return ResponseEntity.created(location).body(boardReadForm);
         }
     }
+
 }
