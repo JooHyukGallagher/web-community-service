@@ -106,4 +106,31 @@ class BoardApiControllerTest {
                 .andExpect(status().isCreated())
         ;
     }
+
+    @Test
+    @WithAccount("joohyuk")
+    @DisplayName("Board 생성 - 실패")
+    void createBoard_fail() throws Exception {
+        // given
+        BoardWriteForm boardWriteForm = BoardWriteForm.builder()
+                .title("")
+                .boardType(BoardType.FREE)
+                .content("")
+                .build();
+        String requestUri = "/api/v1/boards";
+
+        // then
+        ResultActions resultActions = mockMvc.perform(post(requestUri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(boardWriteForm)));
+
+        // then
+        resultActions
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("code").exists())
+                .andExpect(jsonPath("message").exists())
+                .andExpect(jsonPath("description").exists());
+    }
 }
