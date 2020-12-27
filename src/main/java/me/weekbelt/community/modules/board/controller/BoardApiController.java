@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,10 +22,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.Collection;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(value = "/api/v1/boards")
@@ -34,36 +33,34 @@ public class BoardApiController {
     private final BoardService boardService;
 
     @GetMapping
-    public ResponseEntity<?> readBoardList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                           BoardSearch boardSearch) {
+    @ResponseStatus(HttpStatus.OK)
+    public BoardsResponse readBoardList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                           @ModelAttribute BoardSearch boardSearch) {
         Page<BoardListElementForm> boards = boardService.findBoardList(boardSearch, pageable);
-        BoardsResponse boardsResponse = BoardsResponse.builder()
+        return BoardsResponse.builder()
                 .boards(boards)
                 .boardSearch(boardSearch)
                 .build();
-
-        return ResponseEntity.ok().body(boardsResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> readBoard(@PathVariable Long id, BoardSearch boardSearch, @RequestParam Integer page) {
+    @ResponseStatus(HttpStatus.OK)
+    public BoardResponse readBoard(@PathVariable Long id, BoardSearch boardSearch, @RequestParam Integer page) {
         BoardReadForm boardReadForm = boardService.findBoardReadFormById(id);
-        BoardResponse boardResponse = BoardResponse.builder()
+        return BoardResponse.builder()
                 .boardReadForm(boardReadForm)
                 .boardSearch(boardSearch)
                 .currentPage(page)
                 .build();
-
-        return ResponseEntity.ok().body(boardResponse);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createBoard(@CurrentAccount Account account,
                                          @RequestBody @Valid BoardWriteForm boardWriteForm,
                                          Errors errors) {
-        // TODO: Error 메시지 Serialize
-        if (errors.hasErrors()) {
 
+        if (errors.hasErrors()) {
             return GlobalExceptionHandler.getErrorResponseEntity(ErrorCode.INVALID_INPUT_VALUE);
         }
 
@@ -73,16 +70,14 @@ public class BoardApiController {
             if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 Long boardId = boardService.createBoard(account, boardWriteForm);
                 BoardReadForm boardReadForm = boardService.findBoardReadFormById(boardId);
-                URI location = linkTo(BoardApiController.class).slash(boardId).toUri();
-                return ResponseEntity.created(location).body(boardReadForm);
+                return ResponseEntity.ok().body(boardReadForm);
             } else {
                 return ResponseEntity.badRequest().build();
             }
         } else {
             Long boardId = boardService.createBoard(account, boardWriteForm);
             BoardReadForm boardReadForm = boardService.findBoardReadFormById(boardId);
-            URI location = linkTo(BoardApiController.class).slash(boardId).toUri();
-            return ResponseEntity.created(location).body(boardReadForm);
+            return ResponseEntity.ok().body(boardReadForm);
         }
     }
 
