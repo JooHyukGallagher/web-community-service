@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -96,6 +97,7 @@ class BoardApiControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(post(requestUri)
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardWriteForm)));
@@ -121,6 +123,7 @@ class BoardApiControllerTest {
 
         // then
         ResultActions resultActions = mockMvc.perform(post(requestUri)
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardWriteForm)));
@@ -131,6 +134,6 @@ class BoardApiControllerTest {
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("code").exists())
                 .andExpect(jsonPath("message").exists())
-                .andExpect(jsonPath("description").exists());
+                .andExpect(jsonPath("severity").exists());
     }
 }

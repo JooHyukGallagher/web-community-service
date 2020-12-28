@@ -22,7 +22,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Collection;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
@@ -55,7 +58,6 @@ public class BoardApiController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createBoard(@CurrentAccount Account account,
                                          @RequestBody @Valid BoardWriteForm boardWriteForm,
                                          Errors errors) {
@@ -70,14 +72,16 @@ public class BoardApiController {
             if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 Long boardId = boardService.createBoard(account, boardWriteForm);
                 BoardReadForm boardReadForm = boardService.findBoardReadFormById(boardId);
-                return ResponseEntity.ok().body(boardReadForm);
+                URI uri = linkTo(BoardApiController.class).slash(boardId).toUri();
+                return ResponseEntity.created(uri).body(boardReadForm);
             } else {
                 return ResponseEntity.badRequest().build();
             }
         } else {
             Long boardId = boardService.createBoard(account, boardWriteForm);
             BoardReadForm boardReadForm = boardService.findBoardReadFormById(boardId);
-            return ResponseEntity.ok().body(boardReadForm);
+            URI uri = linkTo(BoardApiController.class).slash(boardId).toUri();
+            return ResponseEntity.created(uri).body(boardReadForm);
         }
     }
 
