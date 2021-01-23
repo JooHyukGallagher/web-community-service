@@ -1,6 +1,6 @@
 package me.weekbelt.community.modules.board.repository;
 
-import me.weekbelt.community.modules.account.Account;
+import java.util.Optional;
 import me.weekbelt.community.modules.board.Board;
 import me.weekbelt.community.modules.board.BoardType;
 import org.springframework.data.domain.Page;
@@ -10,11 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
 @Transactional(readOnly = true)
-public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom{
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
     Page<Board> findAllByBoardTypeOrderByIdDesc(BoardType boardType, Pageable pageable);
 
