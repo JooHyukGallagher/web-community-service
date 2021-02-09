@@ -1,0 +1,22 @@
+spring:
+  profiles: local
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+server:
+  tomcat:
+    max-http-form-post-size: 5MB
