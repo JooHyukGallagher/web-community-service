@@ -14,9 +14,14 @@ import java.io.IOException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    public static ResponseEntity<ErrorResponse> getErrorResponseEntity(ErrorCode errorCode) {
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+    public static ResponseEntity<ErrorResponse> getErrorResponseEntity(ErrorCode errorCode, String message) {
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode, message);
         return new ResponseEntity<>(errorResponse, errorCode.getHttpStatus());
+    }
+
+    public static ResponseEntity<ErrorResponse> getErrorResponseEntity(ErrorCode errorCode) {
+        ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, errorCode.getHttpStatus());
     }
 
     @ExceptionHandler(RuntimeException.class)
